@@ -1,0 +1,73 @@
+name: Validate DraftRoom
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: draftroom
+          POSTGRES_DB: draftroom_test
+          POSTGRES_PASSWORD: test-only-password
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U draftroom -d draftroom_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgres://draftroom:test-only-password@localhost:5432/draftroom_test
+      CI: "true"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: backend
+      - run: cargo fmt --manifest-path backend/Cargo.toml --check
+      - run: cargo clippy --manifest-path backend/Cargo.toml --all-targets --locked -- -D warnings
+      - run: cargo test --manifest-path backend/Cargo.toml --locked
+      - name: API and PostgreSQL integration
+        run: |
+          set -euo pipefail
+          cargo run --manifest-path backend/Cargo.toml --locked > /tmp/draftroom-api.log 2>&1 &
+          DRAFTROOM_API_PID=$!
+          trap 'kill "$DRAFTROOM_API_PID" || true' EXIT
+          for attempt in $(seq 1 60); do
+            if curl -fsS http://localhost:8080/health > /dev/null; then break; fi
+            sleep 1
+          done
+          python3 scripts/smoke.py http://localhost:8080
+  flutter:
+    runs-on: ubuntu-latest
+    env:
+      CI: "true"
+      FLUTTER_SUPPRESS_ANALYTICS: "true"
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.47.9'
+          cache: true
+      - run: flutter pub get
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build web --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: draftroom-web
+          path: mobile/build/web
+          retention-days: 7
+      - run: flutter build apk --debug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: draftroom-debug-apk
+          path: mobile/build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 7

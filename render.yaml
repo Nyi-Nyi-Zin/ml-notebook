@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: draftroom-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: APP_ORIGINS
+        sync: false
+      - key: DB_MAX_CONNECTIONS
+        value: "4"
+      - key: RUST_LOG
+        value: info

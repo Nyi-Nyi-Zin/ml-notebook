@@ -1,0 +1,1385 @@
+{
+  "patch": {
+    "id": "baseline-2026-11-07",
+    "label": "Baseline · review required",
+    "reviewed": false,
+    "notes": "Editable coach assumptions. This is not a verified current MLBB patch.",
+    "sources": [
+      "https://www.oneesports.gg/mobile-legends/minotaur-best-build-guide/",
+      "https://www.oneesports.gg/mobile-legends/esmeralda-best-build-guide/",
+      "https://liquipedia.net/mobilelegends/Portal:Emblems"
+    ]
+  },
+  "heroes": [
+    {
+      "id": "minotaur",
+      "name": "Minotaur",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "cc",
+        "heal",
+        "engage"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "esmeralda",
+      "name": "Esmeralda",
+      "roles": [
+        "EXP",
+        "Mid"
+      ],
+      "tags": [
+        "frontline",
+        "sustain",
+        "dive",
+        "shield"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "ling",
+      "name": "Ling",
+      "roles": [
+        "Jungle"
+      ],
+      "tags": [
+        "assassin",
+        "dive",
+        "burst"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "lylia",
+      "name": "Lylia",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "poke",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "claude",
+      "name": "Claude",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "dps",
+        "dive",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "khufra",
+      "name": "Khufra",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "cc",
+        "engage",
+        "antidash"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "hayabusa",
+      "name": "Hayabusa",
+      "roles": [
+        "Jungle"
+      ],
+      "tags": [
+        "assassin",
+        "dive",
+        "burst"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "valentina",
+      "name": "Valentina",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "cc",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "terizla",
+      "name": "Terizla",
+      "roles": [
+        "EXP"
+      ],
+      "tags": [
+        "frontline",
+        "sustain",
+        "cc",
+        "engage"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "brody",
+      "name": "Brody",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "burst",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "tigreal",
+      "name": "Tigreal",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "cc",
+        "engage"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "atlas",
+      "name": "Atlas",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "cc",
+        "engage"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "lolita",
+      "name": "Lolita",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "cc",
+        "peel",
+        "shield"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "akai",
+      "name": "Akai",
+      "roles": [
+        "Roam",
+        "Jungle"
+      ],
+      "tags": [
+        "tank",
+        "cc",
+        "peel"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "grock",
+      "name": "Grock",
+      "roles": [
+        "Roam",
+        "EXP"
+      ],
+      "tags": [
+        "tank",
+        "cc",
+        "engage"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "hylos",
+      "name": "Hylos",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "sustain",
+        "engage"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "belerick",
+      "name": "Belerick",
+      "roles": [
+        "Roam",
+        "EXP"
+      ],
+      "tags": [
+        "tank",
+        "cc",
+        "peel"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "franco",
+      "name": "Franco",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "suppress",
+        "pick"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "kaja",
+      "name": "Kaja",
+      "roles": [
+        "Roam",
+        "EXP"
+      ],
+      "tags": [
+        "suppress",
+        "pick"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "chou",
+      "name": "Chou",
+      "roles": [
+        "Roam",
+        "EXP"
+      ],
+      "tags": [
+        "cc",
+        "pick",
+        "dive"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "mathilda",
+      "name": "Mathilda",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "heal",
+        "shield",
+        "peel",
+        "dive"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "angela",
+      "name": "Angela",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "heal",
+        "shield",
+        "peel"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "floryn",
+      "name": "Floryn",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "heal",
+        "cc"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "estes",
+      "name": "Estes",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "heal",
+        "sustain"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "diggie",
+      "name": "Diggie",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "peel",
+        "shield",
+        "poke"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "rafaela",
+      "name": "Rafaela",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "heal",
+        "peel"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "chip",
+      "name": "Chip",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "cc",
+        "engage"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "jawhead",
+      "name": "Jawhead",
+      "roles": [
+        "Roam",
+        "EXP"
+      ],
+      "tags": [
+        "frontline",
+        "cc",
+        "pick"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "carmilla",
+      "name": "Carmilla",
+      "roles": [
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "sustain",
+        "cc",
+        "engage"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "natalia",
+      "name": "Natalia",
+      "roles": [
+        "Roam",
+        "Jungle"
+      ],
+      "tags": [
+        "assassin",
+        "pick",
+        "burst"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "selena",
+      "name": "Selena",
+      "roles": [
+        "Roam",
+        "Mid"
+      ],
+      "tags": [
+        "pick",
+        "cc",
+        "burst"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "fredrinn",
+      "name": "Fredrinn",
+      "roles": [
+        "Jungle",
+        "EXP"
+      ],
+      "tags": [
+        "tank",
+        "sustain",
+        "cc"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "baxia",
+      "name": "Baxia",
+      "roles": [
+        "Jungle",
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "antiheal",
+        "dive"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "lancelot",
+      "name": "Lancelot",
+      "roles": [
+        "Jungle"
+      ],
+      "tags": [
+        "assassin",
+        "dive",
+        "burst"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "fanny",
+      "name": "Fanny",
+      "roles": [
+        "Jungle"
+      ],
+      "tags": [
+        "assassin",
+        "dive",
+        "burst"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "nolan",
+      "name": "Nolan",
+      "roles": [
+        "Jungle"
+      ],
+      "tags": [
+        "assassin",
+        "dive",
+        "burst"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "suyou",
+      "name": "Suyou",
+      "roles": [
+        "Jungle",
+        "EXP"
+      ],
+      "tags": [
+        "dive",
+        "burst"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "joy",
+      "name": "Joy",
+      "roles": [
+        "Jungle",
+        "EXP"
+      ],
+      "tags": [
+        "assassin",
+        "dive"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "julian",
+      "name": "Julian",
+      "roles": [
+        "Jungle",
+        "Mid",
+        "EXP"
+      ],
+      "tags": [
+        "burst",
+        "cc",
+        "dive"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "karina",
+      "name": "Karina",
+      "roles": [
+        "Jungle"
+      ],
+      "tags": [
+        "assassin",
+        "dive",
+        "burst"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "helcurt",
+      "name": "Helcurt",
+      "roles": [
+        "Jungle"
+      ],
+      "tags": [
+        "assassin",
+        "pick",
+        "burst"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "roger",
+      "name": "Roger",
+      "roles": [
+        "Jungle",
+        "Gold"
+      ],
+      "tags": [
+        "dive",
+        "dps",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "alpha",
+      "name": "Alpha",
+      "roles": [
+        "Jungle",
+        "EXP"
+      ],
+      "tags": [
+        "frontline",
+        "sustain",
+        "cc"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "martis",
+      "name": "Martis",
+      "roles": [
+        "Jungle",
+        "EXP"
+      ],
+      "tags": [
+        "frontline",
+        "cc",
+        "dive"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "yi-sun-shin",
+      "name": "Yi Sun-shin",
+      "roles": [
+        "Jungle"
+      ],
+      "tags": [
+        "dps",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "barats",
+      "name": "Barats",
+      "roles": [
+        "Jungle",
+        "EXP"
+      ],
+      "tags": [
+        "tank",
+        "sustain",
+        "suppress"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "granger",
+      "name": "Granger",
+      "roles": [
+        "Jungle",
+        "Gold"
+      ],
+      "tags": [
+        "poke",
+        "burst"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "aamon",
+      "name": "Aamon",
+      "roles": [
+        "Jungle"
+      ],
+      "tags": [
+        "assassin",
+        "burst",
+        "dive"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "gusion",
+      "name": "Gusion",
+      "roles": [
+        "Jungle",
+        "Mid"
+      ],
+      "tags": [
+        "assassin",
+        "burst",
+        "dive"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "yu-zhong",
+      "name": "Yu Zhong",
+      "roles": [
+        "EXP"
+      ],
+      "tags": [
+        "frontline",
+        "sustain",
+        "dive",
+        "cc"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "lapu-lapu",
+      "name": "Lapu-Lapu",
+      "roles": [
+        "EXP"
+      ],
+      "tags": [
+        "frontline",
+        "dive",
+        "cc"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "arlott",
+      "name": "Arlott",
+      "roles": [
+        "EXP",
+        "Roam"
+      ],
+      "tags": [
+        "frontline",
+        "sustain",
+        "cc"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "ruby",
+      "name": "Ruby",
+      "roles": [
+        "EXP",
+        "Roam"
+      ],
+      "tags": [
+        "frontline",
+        "sustain",
+        "cc",
+        "peel"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "edith",
+      "name": "Edith",
+      "roles": [
+        "EXP",
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "cc",
+        "peel"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "paquito",
+      "name": "Paquito",
+      "roles": [
+        "EXP",
+        "Jungle"
+      ],
+      "tags": [
+        "burst",
+        "dive",
+        "cc"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "benedetta",
+      "name": "Benedetta",
+      "roles": [
+        "EXP",
+        "Jungle"
+      ],
+      "tags": [
+        "assassin",
+        "dive"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "x-borg",
+      "name": "X.Borg",
+      "roles": [
+        "EXP",
+        "Jungle"
+      ],
+      "tags": [
+        "sustain",
+        "poke",
+        "truedmg"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "dyrroth",
+      "name": "Dyrroth",
+      "roles": [
+        "EXP",
+        "Jungle"
+      ],
+      "tags": [
+        "burst",
+        "dive"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "gatotkaca",
+      "name": "Gatotkaca",
+      "roles": [
+        "EXP",
+        "Roam"
+      ],
+      "tags": [
+        "tank",
+        "sustain",
+        "cc",
+        "engage"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "phoveus",
+      "name": "Phoveus",
+      "roles": [
+        "EXP"
+      ],
+      "tags": [
+        "frontline",
+        "sustain",
+        "dive"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "uranus",
+      "name": "Uranus",
+      "roles": [
+        "EXP"
+      ],
+      "tags": [
+        "frontline",
+        "sustain"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "thamuz",
+      "name": "Thamuz",
+      "roles": [
+        "EXP"
+      ],
+      "tags": [
+        "frontline",
+        "sustain",
+        "dps"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "cici",
+      "name": "Cici",
+      "roles": [
+        "EXP"
+      ],
+      "tags": [
+        "sustain",
+        "poke"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "guinevere",
+      "name": "Guinevere",
+      "roles": [
+        "EXP"
+      ],
+      "tags": [
+        "cc",
+        "engage",
+        "burst"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "minsitthar",
+      "name": "Minsitthar",
+      "roles": [
+        "EXP",
+        "Roam"
+      ],
+      "tags": [
+        "frontline",
+        "cc",
+        "antidash"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "silvanna",
+      "name": "Silvanna",
+      "roles": [
+        "EXP"
+      ],
+      "tags": [
+        "frontline",
+        "cc",
+        "engage"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "sun",
+      "name": "Sun",
+      "roles": [
+        "EXP",
+        "Jungle"
+      ],
+      "tags": [
+        "dps",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "yve",
+      "name": "Yve",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "poke",
+        "zone",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "pharsa",
+      "name": "Pharsa",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "poke",
+        "burst",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "xavier",
+      "name": "Xavier",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "poke",
+        "cc",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "luo-yi",
+      "name": "Luo Yi",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "cc",
+        "burst",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "faramis",
+      "name": "Faramis",
+      "roles": [
+        "Mid",
+        "Roam"
+      ],
+      "tags": [
+        "peel",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "valir",
+      "name": "Valir",
+      "roles": [
+        "Mid",
+        "Roam"
+      ],
+      "tags": [
+        "poke",
+        "cc",
+        "peel"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "vexana",
+      "name": "Vexana",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "cc",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "novaria",
+      "name": "Novaria",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "poke",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "aurora",
+      "name": "Aurora",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "cc",
+        "burst",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "kadita",
+      "name": "Kadita",
+      "roles": [
+        "Mid",
+        "Roam"
+      ],
+      "tags": [
+        "burst",
+        "cc",
+        "dive"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "kagura",
+      "name": "Kagura",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "burst",
+        "poke"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "lunox",
+      "name": "Lunox",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "burst",
+        "dps"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "harith",
+      "name": "Harith",
+      "roles": [
+        "Gold",
+        "Mid"
+      ],
+      "tags": [
+        "shield",
+        "dive",
+        "dps"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "chang-e",
+      "name": "Chang’e",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "poke",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "nana",
+      "name": "Nana",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "cc",
+        "burst",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "eudora",
+      "name": "Eudora",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "cc",
+        "burst",
+        "pick"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "cyclops",
+      "name": "Cyclops",
+      "roles": [
+        "Mid",
+        "Jungle"
+      ],
+      "tags": [
+        "sustain",
+        "cc"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "zhuxin",
+      "name": "Zhuxin",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "cc",
+        "zone",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "zhask",
+      "name": "Zhask",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "zone",
+        "dps",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "odette",
+      "name": "Odette",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "burst",
+        "cc"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "cecilion",
+      "name": "Cecilion",
+      "roles": [
+        "Mid"
+      ],
+      "tags": [
+        "poke",
+        "waveclear"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "bruno",
+      "name": "Bruno",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "dps",
+        "basic",
+        "burst"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "beatrix",
+      "name": "Beatrix",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "poke",
+        "burst",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "clint",
+      "name": "Clint",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "poke",
+        "burst",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "irithel",
+      "name": "Irithel",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "dps",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "melissa",
+      "name": "Melissa",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "dps",
+        "basic",
+        "peel"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "karrie",
+      "name": "Karrie",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "dps",
+        "basic",
+        "truedmg"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "lesley",
+      "name": "Lesley",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "poke",
+        "burst",
+        "truedmg",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "ixia",
+      "name": "Ixia",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "dps",
+        "basic",
+        "zone"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "moskov",
+      "name": "Moskov",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "dps",
+        "basic",
+        "cc"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "wanwan",
+      "name": "Wanwan",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "dps",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "natan",
+      "name": "Natan",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "dps",
+        "basic"
+      ],
+      "damage": "magic"
+    },
+    {
+      "id": "popol-and-kupa",
+      "name": "Popol and Kupa",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "cc",
+        "basic",
+        "pick"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "layla",
+      "name": "Layla",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "poke",
+        "dps",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "miya",
+      "name": "Miya",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "dps",
+        "basic"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "hanabi",
+      "name": "Hanabi",
+      "roles": [
+        "Gold"
+      ],
+      "tags": [
+        "dps",
+        "basic",
+        "shield"
+      ],
+      "damage": "physical"
+    },
+    {
+      "id": "kimmy",
+      "name": "Kimmy",
+      "roles": [
+        "Gold",
+        "Mid"
+      ],
+      "tags": [
+        "poke",
+        "dps"
+      ],
+      "damage": "magic"
+    }
+  ]
+}
