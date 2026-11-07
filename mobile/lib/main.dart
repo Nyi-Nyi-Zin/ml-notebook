@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'auth_dialog.dart';
 import 'models.dart';
 import 'workspace.dart';
 
@@ -2006,111 +2007,11 @@ class _DeskState extends State<Desk> {
       setState(() => page = 4);
       return;
     }
-    final email = TextEditingController(),
-        password = TextEditingController(),
-        name = TextEditingController();
-    var register = false, sending = false;
-    String? error;
     await showDialog<void>(
       context: context,
       barrierDismissible: false,
-      builder: (c) => StatefulBuilder(
-        builder: (c, setLocal) => AlertDialog(
-          title: Text(register ? 'Create coach account' : 'Welcome back'),
-          content: SizedBox(
-            width: 400,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (register) ...[
-                  TextField(
-                    controller: name,
-                    decoration: const InputDecoration(labelText: 'Name'),
-                    maxLength: 60,
-                  ),
-                  gap(10),
-                ],
-                TextField(
-                  controller: email,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(labelText: 'Email'),
-                ),
-                gap(12),
-                TextField(
-                  controller: password,
-                  obscureText: true,
-                  enableSuggestions: false,
-                  autocorrect: false,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    helperText: register ? 'At least 10 characters' : null,
-                  ),
-                ),
-                if (error != null) ...[
-                  gap(12),
-                  Text(
-                    error!,
-                    style: const TextStyle(color: red, fontSize: 12),
-                  ),
-                ],
-                gap(12),
-                TextButton(
-                  onPressed: sending
-                      ? null
-                      : () => setLocal(() {
-                          register = !register;
-                          error = null;
-                        }),
-                  child: Text(
-                    register
-                        ? 'Already have an account? Sign in'
-                        : 'New here? Create an account',
-                  ),
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: sending ? null : () => Navigator.pop(c),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: sending
-                  ? null
-                  : () async {
-                      setLocal(() => sending = true);
-                      try {
-                        await w.authenticate(
-                          email.text,
-                          password.text,
-                          name: register ? name.text : null,
-                        );
-                        if (c.mounted) Navigator.pop(c);
-                      } catch (e) {
-                        if (c.mounted) {
-                          setLocal(() {
-                            error = '$e';
-                            sending = false;
-                          });
-                        }
-                      }
-                    },
-              child: Text(
-                sending
-                    ? 'Connecting…'
-                    : register
-                    ? 'Create account'
-                    : 'Sign in',
-              ),
-            ),
-          ],
-        ),
-      ),
+      builder: (_) => CoachAuthDialog(authenticate: w.authenticate),
     );
-    email.dispose();
-    password.dispose();
-    name.dispose();
   }
 
   Future<void> inviteDialog(String teamId, String role) async {

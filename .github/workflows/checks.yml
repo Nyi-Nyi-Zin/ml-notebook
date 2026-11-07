@@ -59,13 +59,22 @@ jobs:
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test
+        env:
+          DRAFTROOM_CAPTURE_AUTH: "1"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: draftroom-auth-layout-check
+          path: mobile/build/auth-dialog-small-screen.png
+          if-no-files-found: ignore
+          retention-days: 7
       - run: flutter build web --release
       - uses: actions/upload-artifact@v4
         with:
           name: draftroom-web
           path: mobile/build/web
           retention-days: 7
-      - run: flutter build apk --debug --build-number=3 --dart-define=API_BASE_URL=https://draftroom-api-0tyr.onrender.com
+      - run: flutter build apk --debug --build-number=4 --dart-define=API_BASE_URL=https://draftroom-api-0tyr.onrender.com
 
       - uses: actions/upload-artifact@v4
         with:
