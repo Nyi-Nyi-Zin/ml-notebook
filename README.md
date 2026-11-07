@@ -99,6 +99,15 @@ Against an **isolated test** API/database run `python3 scripts/smoke.py http://l
 
 ## Deployment
 
-The Rust API can be deployed from `render.yaml` using Docker. Supply your PostgreSQL `DATABASE_URL` and Flutter web `APP_ORIGINS` through the provider's environment settings. No credentials are embedded in the source. Free services can sleep and cold-start; use an appropriate always-on plan for time-sensitive shared drafting.
+The preview backend is deployed in Render's Singapore region:
+
+- API base URL: https://draftroom-api-0tyr.onrender.com
+- Health check: https://draftroom-api-0tyr.onrender.com/health
+- Mobile setup: open Settings, enter the API base URL, then tap **Save & connect**. Existing APKs support this setting; rebuilding is not required to change the endpoint.
+- PostgreSQL 16 is connected over Render's private network. Database credentials are supplied by a Blueprint reference and external database access is disabled.
+- Both resources use Free compute plans. The current Free database expires on **7 December 2026 at 14:52 UTC**; upgrade or migrate before expiry to keep using its data. Free web services sleep after inactivity and can take time to wake.
+- Verified on 7 November 2026: database-backed health check, seeded catalog with 104 heroes, Rust recommendations, unauthenticated draft access rejection, and invalid analysis request rejection. These checks do not create user accounts or saved drafts.
+
+`render.yaml` provisions the Docker API and PostgreSQL together. For a separately deployed Flutter web frontend, set `APP_ORIGINS` to its exact HTTPS origin. The default empty value supports native Flutter clients without allowing browser cross-origin requests. No credentials are embedded in the source. Use an appropriate always-on service and persistent database plan for time-sensitive shared drafting.
 
 The Flutter web build is a separate static artifact in `mobile/build/web`. Android/iOS distribution requires your own package signing and store accounts. Password reset, email verification, public-registration quotas, membership revocation, account deletion and realtime broadcasts are future production-hardening work; this version is for controlled coach testing.
