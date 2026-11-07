@@ -9,10 +9,16 @@
 | Rust/Dart plan parity | All 20 outputs (10 scenarios in English and Myanmar) matched exactly, including named actors, provisional drafts, empty teams and Red-side analysis. |
 | Standalone Dart analysis | No issues in the new planner, generated rules or scenario exporter. |
 | Catalog and generated-rule checks | Passed; 133-hero catalogs remain unchanged. |
-| New Flutter widget tests | Added 10 bilingual scenario tests with focus invariance; extended phone/desktop layout checks to switch Playbook sides. Not executed in this continuation. |
-| New APK/web build and hosted rollout | Not completed. Automatic approval review blocked the GitHub push, so CI did not run and the hosted API still uses the preceding release. A local Flutter SDK download was attempted; the pinned 3.47.9 Linux archive and release metadata returned HTTP 404. |
+| Flutter format, analysis and tests | 35 tests passed in GitHub Actions, including the 10 new bilingual scenario tests with focus invariance and phone/desktop Playbook side-switch checks. |
+| Web release | Built successfully in GitHub Actions. |
+| Android build5 | Built successfully. Downloaded archive matches the GitHub artifact SHA-256; extracted APK passes ZIP integrity checks and identifies `com.cloudnine.draftroom`, version `0.1.0`, versionCode `5`, minSdk `24`. APK SHA-256: `b42d47360e8828d5eda319c48c2b83754e539c4843738ca17229cb3244707247`. |
+| Hosted rollout | Render deploy `dep-dbnlvb8473hc739pqce0` is live at source commit `8389f27567162950b1b1ad3fb0f9d3df6bda808f`. Database health and all 20 bilingual API plan scenarios passed against the public endpoint. These checks did not create accounts or saved drafts. |
 
-The committed changes are ready for review. Flutter analysis, full widget tests, the APK/web build and live API plan checks remain required before claiming the new release is deployed. Existing build4 remains the last delivered APK.
+Validation workflow: https://github.com/Nyi-Nyi-Zin/ml-notebook/actions/runs/42396460398
+
+Local browser inspection was attempted, but Chromium was absent and its pinned browser download returned an invalid ZIP archive. Phone/desktop interaction coverage comes from the passing Flutter widget tests. Physical Android installation and iOS execution remain unverified.
+
+Build5 uses a different debug signing certificate from build4, so Android cannot install it as an in-place update over build4. Before uninstalling, save local drafts to the cloud or copy their JSON. Then uninstall the old development build, install build5 and sign in again. A stable owner-controlled release signing identity is still needed for normal upgrade distribution.
 
 ## Historical checks for the initial GitHub source handoff
 
