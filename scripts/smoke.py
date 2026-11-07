@@ -28,6 +28,8 @@ def account(role):
 
 assert call("GET", "/health")["status"] == "ok"
 catalog = call("GET", "/v1/catalog")
+assert len(catalog["heroes"]) == 133
+assert len(call("GET", "/v1/catalog?patch_id=baseline-2026-11-07")["heroes"]) == 104
 owner, viewer, coach, stranger = [account(r) for r in ("owner", "viewer", "coach", "stranger")]
 ot, vt, ct, st = [a["token"] for a in (owner, viewer, coach, stranger)]
 assert call("GET", "/v1/auth/me", token=ot)["id"] == owner["user"]["id"]

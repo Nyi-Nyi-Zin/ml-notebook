@@ -37,8 +37,10 @@ Map<String, dynamic> localAnalysis(
     'dive': count(hs, 'dive'),
     'burst': count(hs, 'burst'),
     'sustain': hs.where((h) => h.has('heal') || h.has('sustain')).length,
-    'physical': hs.where((h) => h.damage == 'physical').length,
-    'magic': hs.where((h) => h.damage == 'magic').length,
+    'physical': hs
+        .where((h) => ['physical', 'mixed'].contains(h.damage))
+        .length,
+    'magic': hs.where((h) => ['magic', 'mixed'].contains(h.damage)).length,
   };
   final ec = counts(enemies);
   final otherFront = own.where((h) => h.id != focus?.id && h.frontline).length;
@@ -55,7 +57,8 @@ Map<String, dynamic> localAnalysis(
       'Frontline ခံနိုင်ရည်နဲ့ movement ကို ဦးစားပေးထားတယ်။',
     );
     if (roleIndex == 0) {
-      final healer = focus.has('heal') && !focus.has('tank');
+      final healer =
+          (focus.has('heal') || focus.has('support')) && !focus.has('tank');
       final damage = focus.has('assassin') || focus.id == 'selena';
       final durable =
           priority == 'survival' ||
@@ -63,7 +66,7 @@ Map<String, dynamic> localAnalysis(
       base = healer
           ? 'Support'
           : damage
-          ? 'Assassin'
+          ? (focus.damage == 'magic' ? 'Mage' : 'Assassin')
           : 'Tank';
       two = healer || damage || !durable
           ? 'Pull Yourself Together'
@@ -78,8 +81,8 @@ Map<String, dynamic> localAnalysis(
       if (damage && focus.id == 'natalia') spell = 'Execute';
       reason = healer
           ? t(
-              'Healing and skill uptime fit this profile. Scout with cover.',
-              'Heal နဲ့ skill uptime ကို ဦးစားပေးပါ။ Information ယူချိန် teammate cover လိုတယ်။',
+              'Utility and skill uptime fit this profile. Scout with cover.',
+              'Utility နဲ့ skill uptime ကို ဦးစားပေးပါ။ Information ယူချိန် teammate cover လိုတယ်။',
             )
           : damage
           ? t(
@@ -98,12 +101,16 @@ Map<String, dynamic> localAnalysis(
     } else if (roleIndex == 1) {
       base = focus.has('tank')
           ? 'Tank'
+          : focus.damage == 'magic'
+          ? 'Mage'
           : focus.has('sustain')
           ? 'Fighter'
           : 'Assassin';
       two = 'Seasoned Hunter';
       three = focus.has('tank')
           ? 'Concussive Blast'
+          : focus.damage == 'magic'
+          ? 'Lethal Ignition'
           : focus.has('sustain')
           ? 'Brave Smite'
           : 'Killing Spree';
@@ -113,7 +120,7 @@ Map<String, dynamic> localAnalysis(
         'Jungle တာဝန်အတွက် Retribution ယူမယ်။ Clear speed နဲ့ talent interaction ကို ပြန်စစ်ပါ။',
       );
     } else if (roleIndex == 2) {
-      base = 'Mage';
+      base = focus.damage == 'physical' ? 'Assassin' : 'Mage';
       two = 'Bargain Hunter';
       three = focus.has('poke') ? 'Impure Rage' : 'Lethal Ignition';
       spell = ec['control']! >= 3 && !suppress ? 'Purify' : 'Flicker';
@@ -126,8 +133,18 @@ Map<String, dynamic> localAnalysis(
           ? 'Tank'
           : focus.id == 'esmeralda'
           ? 'Support'
+          : focus.damage == 'magic'
+          ? 'Mage'
+          : focus.has('assassin')
+          ? 'Assassin'
           : 'Fighter';
-      three = focus.has('sustain') ? 'Brave Smite' : 'Concussive Blast';
+      three = focus.has('sustain')
+          ? 'Brave Smite'
+          : focus.damage == 'magic'
+          ? 'Lethal Ignition'
+          : focus.has('basic')
+          ? 'Quantum Charge'
+          : 'War Cry';
       spell = ec['control']! >= 3 && !suppress
           ? 'Purify'
           : focus.has('sustain')
@@ -139,7 +156,7 @@ Map<String, dynamic> localAnalysis(
       );
     } else {
       base = focus.damage == 'magic' ? 'Mage' : 'Marksman';
-      two = 'Weapon Master';
+      two = focus.damage == 'magic' ? 'Bargain Hunter' : 'Weapon Master';
       three = focus.has('basic') ? 'Quantum Charge' : 'Lethal Ignition';
       spell = ec['control']! >= 3 && !suppress ? 'Purify' : 'Flicker';
       reason = t(
@@ -182,6 +199,57 @@ Map<String, dynamic> localAnalysis(
     String myBody,
   ) => {'title': t(title, myTitle), 'body': t(body, myBody)};
   final threats = <Map<String, String>>[];
+  if (focus != null && !focus.roles.contains(roles[roleIndex])) {
+    threats.add(
+      p(
+        'Off-lane selection',
+        'Lane မကိုက်တဲ့ pick',
+        "This hero is outside the catalog's suggested lanes. Confirm a practiced flex; the emblem is only a starting profile.",
+        'ဒီ hero က သတ်မှတ်ထားတဲ့ lane မဟုတ်လို့ လေ့ကျင့်ထားတဲ့ flex ဟုတ်မဟုတ် စစ်ပါ။ Emblem က အခြေခံအကြံပြုချက်ပါ။',
+      ),
+    );
+  }
+  if (enemies.any((h) => h.has('truedmg'))) {
+    threats.add(
+      p(
+        'True-damage triggers',
+        'True damage ကို သတိထား',
+        'Track the specific true-damage trigger. Armor and magic defense alone do not answer it; use spacing, HP and deny repeated hits.',
+        'True damage ထွက်စေတဲ့ trigger ကို စောင့်ကြည့်ပါ။ Armor နဲ့ magic defense တင်မလုံလောက်လို့ spacing၊ HP နဲ့ အကြိမ်ကြိမ်ထိတာကို ရှောင်ပါ။',
+      ),
+    );
+  }
+  if (enemies.where((h) => h.has('basic') && h.has('dps')).length >= 2) {
+    threats.add(
+      p(
+        'Basic-attack uptime',
+        'Basic attack ပေးခွင့် မပေးပါနဲ့',
+        'Avoid extended open contact with multiple basic-attack carries. Break line of sight and coordinate control before they free-hit.',
+        'Basic attack carry များနေရင် အချိန်ကြာကြာ ပစ်ခွင့်မပေးပါနဲ့။ မြင်ကွင်းဖြတ်ပြီး CC နဲ့ teammate ကို ညှိပါ။',
+      ),
+    );
+  }
+  if (enemies.any((h) => h.id == 'yin')) {
+    threats.add(
+      p(
+        'Respect isolation',
+        'တစ်ယောက်တည်း မခွဲနေပါနဲ့',
+        'Keep vision before approaching Yin and track his isolation ultimate. Plan survival without assuming outside ally support can reach you.',
+        'Yin အနားဝင်ရင် vision နဲ့ ultimate ကို စစ်ပါ။ Team အကူအညီ အမြဲမီမယ်လို့ မယူဘဲ အသက်ရှင်ဖို့ ပြင်ထားပါ။',
+      ),
+    );
+  }
+  if (enemies.any((h) => h.id == 'marcel')) {
+    threats.add(
+      p(
+        "Marcel's control field",
+        'Marcel ရဲ့ control area',
+        "Avoid committing the whole team into Marcel's control area. Keep an exit and check the actual skill state before following an engage.",
+        'Marcel ရဲ့ control area ထဲ team အကုန်မဝင်ပါနဲ့။ ထွက်လမ်းထားပြီး skill အခြေအနေကို စစ်ပြီးမှ follow-up လုပ်ပါ။',
+      ),
+    );
+  }
+
   if (suppress) {
     threats.add(
       p(
@@ -272,45 +340,53 @@ Map<String, dynamic> localAnalysis(
   final remaining = own.where((h) => h.id != focus?.id).toList();
   final rc = counts(remaining);
   final candidates =
-      catalog.heroes.where((h) => !draft.used.contains(h.id)).map((h) {
-        var score = 0;
-        final reasons = <String>[];
-        void add(int n, String en, String my) {
-          score += n;
-          reasons.add(t(en, my));
-        }
+      catalog.heroes
+          .where(
+            (h) =>
+                !draft.used.contains(h.id) &&
+                h.roles.contains(roles[roleIndex]),
+          )
+          .map((h) {
+            var score = 0;
+            final reasons = <String>[];
+            void add(int n, String en, String my) {
+              score += n;
+              reasons.add(t(en, my));
+            }
 
-        h.roles.contains(roles[roleIndex])
-            ? add(5, 'Fits this role', 'ဒီ role နဲ့ ကိုက်တယ်')
-            : add(
-                -4,
-                'Off-role: confirm a practiced flex',
-                'လေ့ကျင့်ထားတဲ့ flex ဟုတ်မဟုတ် စစ်ပါ',
-              );
-        if (rc['frontline'] == 0 && h.frontline) {
-          add(3, 'Adds a frontline', 'Frontline ဖြည့်ပေးတယ်');
-        }
-        if (rc['control'] == 0 && (h.has('cc') || h.has('suppress'))) {
-          add(2, 'Adds control', 'Control ဖြည့်ပေးတယ်');
-        }
-        if (rc['magic'] == 0 && h.damage == 'magic') {
-          add(1, 'Adds magic damage', 'Magic damage ဖြည့်ပေးတယ်');
-        }
-        if (ec['dive']! >= 2 && (h.has('peel') || h.has('antidash'))) {
-          add(2, 'Helps against dive', 'Enemy dive ကို ကာကွယ်ဖို့ ကူညီတယ်');
-        }
-        if (ec['sustain']! >= 2 && h.has('antiheal')) {
-          add(2, 'Pressures sustain', 'Enemy sustain ကို ဖိအားပေးနိုင်တယ်');
-        }
-        return {'hero_id': h.id, 'score': score, 'reasons': reasons};
-      }).toList()..sort((a, b) {
-        final n = (b['score'] as int).compareTo(a['score'] as int);
-        return n != 0
-            ? n
-            : (a['hero_id'] as String).compareTo(b['hero_id'] as String);
-      });
+            h.roles.contains(roles[roleIndex])
+                ? add(5, 'Fits this role', 'ဒီ role နဲ့ ကိုက်တယ်')
+                : add(
+                    -4,
+                    'Off-role: confirm a practiced flex',
+                    'လေ့ကျင့်ထားတဲ့ flex ဟုတ်မဟုတ် စစ်ပါ',
+                  );
+            if (rc['frontline'] == 0 && h.frontline) {
+              add(3, 'Adds a frontline', 'Frontline ဖြည့်ပေးတယ်');
+            }
+            if (rc['control'] == 0 && (h.has('cc') || h.has('suppress'))) {
+              add(2, 'Adds control', 'Control ဖြည့်ပေးတယ်');
+            }
+            if (rc['magic'] == 0 && ['magic', 'mixed'].contains(h.damage)) {
+              add(1, 'Adds magic damage', 'Magic damage ဖြည့်ပေးတယ်');
+            }
+            if (ec['dive']! >= 2 && (h.has('peel') || h.has('antidash'))) {
+              add(2, 'Helps against dive', 'Enemy dive ကို ကာကွယ်ဖို့ ကူညီတယ်');
+            }
+            if (ec['sustain']! >= 2 && h.has('antiheal')) {
+              add(2, 'Pressures sustain', 'Enemy sustain ကို ဖိအားပေးနိုင်တယ်');
+            }
+            return {'hero_id': h.id, 'score': score, 'reasons': reasons};
+          })
+          .toList()
+        ..sort((a, b) {
+          final n = (b['score'] as int).compareTo(a['score'] as int);
+          return n != 0
+              ? n
+              : (a['hero_id'] as String).compareTo(b['hero_id'] as String);
+        });
   return {
-    'rules_version': 'offline-rules-1',
+    'rules_version': 'offline-rules-2',
     'patch': catalog.patch,
     'partial': own.length < 5 || enemies.length < 5,
     'own': counts(own),

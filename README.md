@@ -5,7 +5,7 @@ A working first version of an MLBB drafting and coaching app. Mobile UI is Flutt
 ## Included
 
 - Five picks and five manual bans on both teams; duplicate and unknown heroes are rejected by both app and API.
-- A searchable starting pool of 104 hero profiles.
+- A searchable roster of all 133 Original Server heroes, including Hirara, Marcel, Sora, Obsidia, Zetian and Kalea.
 - Explainable emblem, battle-spell, matchup and playstyle prompts. Minotaur rules consider the other frontline, enemy burst and explicit Balanced / Survival / Tempo preferences.
 - English and Myanmar advice, playbook, coach notes, JSON copy/import and copyable Markdown briefs.
 - Offline practice with a bundled catalog and a small Dart companion engine. Online advice is calculated by Rust. Labels identify which engine answered.
@@ -25,7 +25,7 @@ Install Docker Desktop / Docker Compose, or use the non-Docker path below.
 docker compose up --build
 ```
 
-The API is at `http://localhost:8080`; `GET /health` verifies the database. Migrations and the baseline catalog are applied on startup. PostgreSQL data lives in a named Docker volume. The API and database ports bind to your local machine.
+The API is at `http://localhost:8080`; `GET /health` verifies the database. Migrations, the historical 104-hero baseline and the current 133-hero catalog are applied on startup. PostgreSQL data lives in a named Docker volume. The API and database ports bind to your local machine.
 
 ### Without Docker
 
@@ -70,7 +70,9 @@ Team rooms use explicit refresh in this version; there is no live WebSocket broa
 
 ## Catalog and recommendation quality
 
-`data/catalog.json` is the versioned seed source; `mobile/assets/catalog.json` is its offline copy. The starting catalog is explicitly marked **review required**. Hero roles, utility tags and talent pages are coaching assumptions, not verified live game data. Most hero emblem pages are generic role templates; Minotaur has more specific scenario rules. Scores are not win rates or guaranteed counters.
+Roster coverage, sources, inference limits and upgrade behavior are recorded in `docs/roster-update.md`. `python3 scripts/check_catalog.py` guards the exact manifest, unique profiles and online/offline parity.
+
+`data/catalog.json` is the versioned seed source; `mobile/assets/catalog.json` is its offline copy. The 133-name roster was cross-checked on 7 November 2026; the catalog remains **review required** for live balance and optimal-build claims. Suggested lanes, utility tags and talent pages are coaching assumptions, not verified live balance data. Physical/magic counts both include mixed-damage profiles, so those columns are not mutually exclusive. Most hero emblem pages are generic role templates; Minotaur has more specific scenario rules. Scores are not win rates or guaranteed counters.
 
 To add a reviewed catalog, copy the seed shape, assign a **new** patch ID, edit its profiles and review metadata, then import it against the running database:
 
@@ -79,7 +81,7 @@ cd backend
 cargo run --locked --bin import_catalog -- ../data/your-new-catalog.json
 ```
 
-Existing catalog IDs cannot be overwritten. Old drafts retain their patch ID. A future app/catalog release can bundle the new offline catalog; offline cache only restores drafts matching that bundled patch. Keep `reviewed` false until you have checked the relevant game-client effects and draft assumptions.
+Existing catalog IDs cannot be overwritten. Old drafts retain their patch ID. This app release upgrades cached baseline working drafts to the 133-hero catalog while retaining picks, bans and notes. Saved server drafts retain their historical patch. The Settings catalog-upgrade action creates a new working copy without clearing the lineup. Keep `reviewed` false until you have checked the relevant game-client effects and draft assumptions.
 
 Background references are included in Settings. They may describe older patches. This project does not connect to an official MLBB API, ingest live balance patches, simulate damage/items, enforce a current tournament draft sequence, or guarantee permission to use phones at an event.
 
@@ -103,10 +105,10 @@ The preview backend is deployed in Render's Singapore region:
 
 - API base URL: https://draftroom-api-0tyr.onrender.com
 - Health check: https://draftroom-api-0tyr.onrender.com/health
-- Mobile setup: open Settings, enter the API base URL, then tap **Save & connect**. Existing APKs support this setting; rebuilding is not required to change the endpoint.
+- Android CI builds include the hosted API URL by default. Settings still allows a custom API URL or explicit offline practice. Connection startup allows extra time for a Free service cold start.
 - PostgreSQL 16 is connected over Render's private network. Database credentials are supplied by a Blueprint reference and external database access is disabled.
 - Both resources use Free compute plans. The current Free database expires on **7 December 2026 at 14:52 UTC**; upgrade or migrate before expiry to keep using its data. Free web services sleep after inactivity and can take time to wake.
-- Verified on 7 November 2026: database-backed health check, seeded catalog with 104 heroes, Rust recommendations, unauthenticated draft access rejection, and invalid analysis request rejection. These checks do not create user accounts or saved drafts.
+- Verified on 7 November 2026: database-backed health check, seeded catalog (104 heroes at initial deployment; upgraded to 133 in this release), Rust recommendations, unauthenticated draft access rejection, and invalid analysis request rejection. These checks do not create user accounts or saved drafts.
 
 `render.yaml` provisions the Docker API and PostgreSQL together. For a separately deployed Flutter web frontend, set `APP_ORIGINS` to its exact HTTPS origin. The default empty value supports native Flutter clients without allowing browser cross-origin requests. No credentials are embedded in the source. Use an appropriate always-on service and persistent database plan for time-sensitive shared drafting.
 

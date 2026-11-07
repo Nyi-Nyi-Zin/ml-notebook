@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 import 'models.dart';
 import 'workspace.dart';
 
@@ -1754,20 +1756,20 @@ class _DeskState extends State<Desk> {
                   ? null
                   : () async {
                       if (!await confirm(
-                        'Start with the latest catalog?',
-                        'This starts a new empty draft using the latest server catalog. Save or copy your current draft first.',
+                        'Upgrade to the latest catalog?',
+                        'Keeps your picks, bans and notes in a new working copy using the latest catalog. The saved original keeps its historical patch.',
                       )) {
                         return;
                       }
                       await run(
                         w.useLatestCatalog,
                         success:
-                            'Started a draft using the latest server catalog.',
+                            'Upgraded this working copy to the latest catalog.',
                       );
                       if (mounted) setState(() => page = 0);
                     },
               icon: const Icon(Icons.sync, size: 18),
-              label: const Text('New draft with latest catalog'),
+              label: const Text('Upgrade working copy catalog'),
             ),
             gap(),
             pill('${w.catalog!.patch['label']}', color: Colors.amber),

@@ -28,8 +28,14 @@ pub fn counts(hs: &[&Hero]) -> Counts {
             .iter()
             .filter(|h| h.has("sustain") || h.has("heal"))
             .count(),
-        physical: hs.iter().filter(|h| h.damage == "physical").count(),
-        magic: hs.iter().filter(|h| h.damage == "magic").count(),
+        physical: hs
+            .iter()
+            .filter(|h| ["physical", "mixed"].contains(&h.damage.as_str()))
+            .count(),
+        magic: hs
+            .iter()
+            .filter(|h| ["magic", "mixed"].contains(&h.damage.as_str()))
+            .count(),
     }
 }
 #[derive(Debug, Serialize)]
@@ -132,27 +138,43 @@ pub fn analyze(r: &AnalyzeRequest, c: &Catalog) -> Result<Analysis, String> {
     let emblem=focus.map(|h| {
         let (base,one,two,three,spell,reason,tradeoff,alt)=match r.role_index {
             0 => {
-                let healer=h.has("heal")&&!h.has("tank");
+                let healer=(h.has("heal")||h.has("support"))&&!h.has("tank");
                 let damage=h.has("assassin")||h.id=="selena";
                 let durable=matches!(r.priority,Priority::Survival)||matches!(r.priority,Priority::Balanced)&&(other_front==0||enemy.burst>=3);
-                let base=if healer {"Support"} else if damage {"Assassin"} else {"Tank"};
+                let base=if healer {"Support"} else if damage {if h.damage=="magic" {"Mage"} else {"Assassin"}} else {"Tank"};
                 let two=if healer||damage||!durable {"Pull Yourself Together"} else {"Tenacity"};
                 let three=if healer {"Focusing Mark"} else if damage {"Lethal Ignition"} else if h.has("heal")||h.has("sustain") {"Brave Smite"} else {"Concussive Blast"};
                 let spell=if damage&&h.id=="natalia" {"Execute"} else {"Flicker"};
-                let reason=if healer {text(mm,"Utility and healing uptime fit this profile. Use teammate cover when checking fog.","Heal နဲ့ skill uptime ကို ဦးစားပေးထားတယ်။ Information ယူချိန် teammate cover လိုတယ်။")} else if damage {text(mm,"Play around information and isolated targets. Confirm who holds space for your carries.","Information နဲ့ လူခွဲနေတဲ့ target ကို ဦးစားပေးပါ။ Carry အတွက် နေရာထိန်းပေးသူကို သတ်မှတ်ပါ။")} else if durable {text(mm,"You are the main frontline, the enemy has several burst profiles, or Survival was selected. Keep Agility while investing in durability.","Main frontline ဖြစ်တာ၊ enemy burst များတာ၊ Survival ရွေးထားတာကြောင့် ခံနိုင်ရည်ကို ဦးစားပေးထားတယ်။ Rotation အတွက် Agility ဆက်ထားမယ်။")} else {text(mm,"Another ally can share the frontline, or Tempo was selected. Keep Tank durability and Agility, then invest in battle-spell availability.","Frontline တာဝန်ခွဲနိုင်တဲ့ ally ရှိတာ သို့မဟုတ် Tempo ရွေးထားလို့ Tank နဲ့ Agility ထားပြီး Battle Spell uptime ကို ဖြည့်ထားတယ်။")};
+                let reason=if healer {text(mm,"Utility and skill uptime fit this profile. Use teammate cover when checking fog.","Utility နဲ့ skill uptime ကို ဦးစားပေးထားတယ်။ Information ယူချိန် teammate cover လိုတယ်။")} else if damage {text(mm,"Play around information and isolated targets. Confirm who holds space for your carries.","Information နဲ့ လူခွဲနေတဲ့ target ကို ဦးစားပေးပါ။ Carry အတွက် နေရာထိန်းပေးသူကို သတ်မှတ်ပါ။")} else if durable {text(mm,"You are the main frontline, the enemy has several burst profiles, or Survival was selected. Keep Agility while investing in durability.","Main frontline ဖြစ်တာ၊ enemy burst များတာ၊ Survival ရွေးထားတာကြောင့် ခံနိုင်ရည်ကို ဦးစားပေးထားတယ်။ Rotation အတွက် Agility ဆက်ထားမယ်။")} else {text(mm,"Another ally can share the frontline, or Tempo was selected. Keep Tank durability and Agility, then invest in battle-spell availability.","Frontline တာဝန်ခွဲနိုင်တဲ့ ally ရှိတာ သို့မဟုတ် Tempo ရွေးထားလို့ Tank နဲ့ Agility ထားပြီး Battle Spell uptime ကို ဖြည့်ထားတယ်။")};
                 (base,"Agility",two,three,spell,reason,
                  if base=="Tank" {text(mm,"Tank gives up Support's healing, skill cooldown and base movement benefits. Agility only partly offsets that mobility trade-off.","Tank ယူရင် Support ရဲ့ healing၊ skill cooldown နဲ့ base movement benefit တွေကို စွန့်ရတယ်။ Agility က movement trade-off ကို တစ်စိတ်တစ်ပိုင်းပဲ ဖြည့်ပေးတယ်။")} else {text(mm,"This page gives less raw durability than a Tank base. Positioning and team cover matter.","Tank base ထက် ခံနိုင်ရည်နည်းနိုင်လို့ positioning နဲ့ teammate cover ကို ဂရုစိုက်ပါ။")},
                  if two=="Tenacity" {text(mm,"Consider Pull Yourself Together when you can survive and missing Flicker windows limits your plays.","ခံနိုင်ရည်လုံလောက်ပြီး Flicker မမီလို့ play လုပ်မရရင် Pull Yourself Together ပြောင်းစဉ်းစားပါ။")} else {text(mm,"Consider Tenacity when you cannot survive the first damage wave. Another frontline ally does not guarantee your safety.","ပထမ damage wave မခံနိုင်ရင် Tenacity ပြောင်းစဉ်းစားပါ။ Frontline ally ရှိတာနဲ့ လုံလောက်ပြီလို့ မယူပါနဲ့။")})
             },
-            1 => (if h.has("tank") {"Tank"} else if h.has("sustain") {"Fighter"} else {"Assassin"},"Agility","Seasoned Hunter",if h.has("tank") {"Concussive Blast"} else if h.has("sustain") {"Brave Smite"} else {"Killing Spree"},"Retribution",
+            1 => (if h.has("tank") {"Tank"} else if h.damage=="magic" {"Mage"} else if h.has("sustain") {"Fighter"} else {"Assassin"},"Agility","Seasoned Hunter",if h.has("tank") {"Concussive Blast"} else if h.damage=="magic" {"Lethal Ignition"} else if h.has("sustain") {"Brave Smite"} else {"Killing Spree"},"Retribution",
                   text(mm,"Retribution matches the Jungle role. The base follows this hero's durability or damage profile.","Jungle တာဝန်အတွက် Retribution ယူမယ်။ Hero ရဲ့ damage နဲ့ ခံနိုင်ရည်အလိုက် base ရွေးထားတယ်။"),text(mm,"Generic starting template. Verify clear speed, talent availability and the hero's current-patch interactions.","အခြေခံ template ဖြစ်လို့ jungle clear speed၊ talent ရနိုင်မှုနဲ့ current patch interaction ကို ပြန်စစ်ပါ။"),text(mm,"Select the Retribution upgrade around target access and survivability.","Target ကို ဝင်နိုင်မှုနဲ့ အသက်ရှင်ရေးအလိုက် Retribution upgrade ရွေးပါ။")),
-            2 => ("Mage","Agility","Bargain Hunter",if h.has("poke") {"Impure Rage"} else {"Lethal Ignition"},if enemy.control>=3&&!es.iter().any(|h|h.has("suppress")) {"Purify"} else {"Flicker"},text(mm,"Wave access and safe rotation support your damage windows.","Wave ရှင်းနိုင်မှုနဲ့ လုံခြုံတဲ့ rotation ကို ဦးစားပေးထားတယ်။"),text(mm,"Role template, not a tested optimal hero build. Resource needs may override it.","Role template ဖြစ်ပြီး hero အတွက် optimal build လို့ မယူပါနဲ့။ Resource လိုအပ်ချက်အရ ပြောင်းနိုင်တယ်။"),text(mm,"Choose a defensive spell that answers the actual enemy engage. Purify does not remove suppression.","Enemy engage ကို ဖြေရှင်းနိုင်တဲ့ spell ရွေးပါ။ Purify နဲ့ suppression ကို မဖြေနိုင်ဘူး။")),
-            3 => (if h.has("tank") {"Tank"} else if h.id=="esmeralda" {"Support"} else {"Fighter"},"Agility","Tenacity",if h.has("sustain") {"Brave Smite"} else {"Concussive Blast"},if enemy.control>=3&&!es.iter().any(|h|h.has("suppress")) {"Purify"} else if h.has("sustain") {"Vengeance"} else {"Flicker"},text(mm,"Hold the side wave and arrive with enough HP to create a second angle.","Side wave ကို ထိန်းပြီး ဒုတိယ angle က pressure ပေးနိုင်အောင် HP ထိန်းလာပါ။"),text(mm,"The lane matchup and build strongly affect this choice. No item timings are simulated.","Lane matchup နဲ့ item build ပေါ် မူတည်တယ်။ Item timing ကို ဒီ engine မှာ မတွက်ထားသေးဘူး။"),text(mm,"Flicker supports target access; Vengeance suits extended contact. Review the lane opponent before locking.","Flicker က ဝင်ရောက်နိုင်ဖို့၊ Vengeance က fight ရှည်အတွက် စဉ်းစားနိုင်တယ်။ Lane opponent ကိုပါ ပြန်စစ်ပါ။")),
-            _ => (if h.damage=="magic" {"Mage"} else {"Marksman"},"Agility","Weapon Master",if h.has("basic") {"Quantum Charge"} else {"Lethal Ignition"},if enemy.control>=3&&!es.iter().any(|h|h.has("suppress")) {"Purify"} else {"Flicker"},text(mm,"Preserve safe damage uptime and answer the enemy's route to your backline.","Damage ပေးနိုင်တဲ့အချိန်ကို ထိန်းပြီး enemy ဝင်လာမယ့်လမ်းကို စဉ်းစားပါ။"),text(mm,"This is a generic lane page. Hero-specific mechanics and lane matchups can override it.","Lane အတွက် generic page ဖြစ်တယ်။ Hero mechanics နဲ့ matchup အရ ပြောင်းဖို့လိုနိုင်တယ်။"),text(mm,"Inspire is an alternative only for heroes and fights where safe basic-attack uptime is realistic.","Basic attack လုံလုံခြုံခြုံ ပေးနိုင်တဲ့ hero နဲ့ fight ဖြစ်မှ Inspire ကို စဉ်းစားပါ။"))
+            2 => (if h.damage=="physical" {"Assassin"} else {"Mage"},"Agility","Bargain Hunter",if h.has("poke") {"Impure Rage"} else {"Lethal Ignition"},if enemy.control>=3&&!es.iter().any(|h|h.has("suppress")) {"Purify"} else {"Flicker"},text(mm,"Wave access and safe rotation support your damage windows.","Wave ရှင်းနိုင်မှုနဲ့ လုံခြုံတဲ့ rotation ကို ဦးစားပေးထားတယ်။"),text(mm,"Role template, not a tested optimal hero build. Resource needs may override it.","Role template ဖြစ်ပြီး hero အတွက် optimal build လို့ မယူပါနဲ့။ Resource လိုအပ်ချက်အရ ပြောင်းနိုင်တယ်။"),text(mm,"Choose a defensive spell that answers the actual enemy engage. Purify does not remove suppression.","Enemy engage ကို ဖြေရှင်းနိုင်တဲ့ spell ရွေးပါ။ Purify နဲ့ suppression ကို မဖြေနိုင်ဘူး။")),
+            3 => (if h.has("tank") {"Tank"} else if h.id=="esmeralda" {"Support"} else if h.damage=="magic" {"Mage"} else if h.has("assassin") {"Assassin"} else {"Fighter"},"Agility","Tenacity",if h.has("sustain") {"Brave Smite"} else if h.damage=="magic" {"Lethal Ignition"} else if h.has("basic") {"Quantum Charge"} else {"War Cry"},if enemy.control>=3&&!es.iter().any(|h|h.has("suppress")) {"Purify"} else if h.has("sustain") {"Vengeance"} else {"Flicker"},text(mm,"Hold the side wave and arrive with enough HP to create a second angle.","Side wave ကို ထိန်းပြီး ဒုတိယ angle က pressure ပေးနိုင်အောင် HP ထိန်းလာပါ။"),text(mm,"The lane matchup and build strongly affect this choice. No item timings are simulated.","Lane matchup နဲ့ item build ပေါ် မူတည်တယ်။ Item timing ကို ဒီ engine မှာ မတွက်ထားသေးဘူး။"),text(mm,"Flicker supports target access; Vengeance suits extended contact. Review the lane opponent before locking.","Flicker က ဝင်ရောက်နိုင်ဖို့၊ Vengeance က fight ရှည်အတွက် စဉ်းစားနိုင်တယ်။ Lane opponent ကိုပါ ပြန်စစ်ပါ။")),
+            _ => (if h.damage=="magic" {"Mage"} else {"Marksman"},"Agility",if h.damage=="magic" {"Bargain Hunter"} else {"Weapon Master"},if h.has("basic") {"Quantum Charge"} else {"Lethal Ignition"},if enemy.control>=3&&!es.iter().any(|h|h.has("suppress")) {"Purify"} else {"Flicker"},text(mm,"Preserve safe damage uptime and answer the enemy's route to your backline.","Damage ပေးနိုင်တဲ့အချိန်ကို ထိန်းပြီး enemy ဝင်လာမယ့်လမ်းကို စဉ်းစားပါ။"),text(mm,"This is a generic lane page. Hero-specific mechanics and lane matchups can override it.","Lane အတွက် generic page ဖြစ်တယ်။ Hero mechanics နဲ့ matchup အရ ပြောင်းဖို့လိုနိုင်တယ်။"),text(mm,"Inspire is an alternative only for heroes and fights where safe basic-attack uptime is realistic.","Basic attack လုံလုံခြုံခြုံ ပေးနိုင်တဲ့ hero နဲ့ fight ဖြစ်မှ Inspire ကို စဉ်းစားပါ။"))
         };
         Emblem {base:base.into(),talents:[one.into(),two.into(),three.into()],spell:spell.into(),reason,tradeoff,alternative:alt,specificity:if h.id=="minotaur" {"scenario_rules"} else {"role_template"}.into()}
     });
     let mut threats = vec![];
+    if focus.is_some_and(|h| !h.roles.iter().any(|role| role == ROLES[r.role_index])) {
+        threats.push(prompt(mm,"Off-lane selection","Lane မကိုက်တဲ့ pick","This hero is outside the catalog's suggested lanes. Confirm a practiced flex; the emblem remains a starting profile, not evidence of lane suitability.","ဒီ hero က သတ်မှတ်ထားတဲ့ lane မဟုတ်လို့ လေ့ကျင့်ထားတဲ့ flex ဟုတ်မဟုတ် စစ်ပါ။ Emblem အကြံပြုတာနဲ့ lane ကိုက်တယ်လို့ မယူပါနဲ့။"));
+    }
+    if es.iter().any(|h| h.has("truedmg")) {
+        threats.push(prompt(mm,"True-damage triggers","True damage ကို သတိထား","Track the specific true-damage trigger. Armor and magic defense alone do not answer it; use spacing, HP and deny repeated hits.","True damage ထွက်စေတဲ့ skill နဲ့ trigger ကို စောင့်ကြည့်ပါ။ Armor နဲ့ magic defense တင်မလုံလောက်လို့ spacing၊ HP နဲ့ အကြိမ်ကြိမ်ထိတာကို ရှောင်ပါ။"));
+    }
+    if es.iter().filter(|h| h.has("basic") && h.has("dps")).count() >= 2 {
+        threats.push(prompt(mm,"Basic-attack uptime","Basic attack ပေးခွင့် မပေးပါနဲ့","Avoid extended open contact with multiple basic-attack carries. Break line of sight and coordinate control before they free-hit.","Basic attack carry များနေရင် အချိန်ကြာကြာ ပစ်ခွင့်မပေးပါနဲ့။ မြင်ကွင်းဖြတ်ပြီး CC နဲ့ teammate ကို ညှိပါ။"));
+    }
+    if es.iter().any(|h| h.id == "yin") {
+        threats.push(prompt(mm,"Respect isolation","တစ်ယောက်တည်း မခွဲနေပါနဲ့","Keep vision before approaching Yin and track his isolation ultimate. Plan survival without assuming outside ally support can reach you.","Yin အနားဝင်ရင် vision နဲ့ ultimate ကို စစ်ပါ။ Team အကူအညီ အမြဲမီမယ်လို့ မယူဘဲ အသက်ရှင်ဖို့ ပြင်ထားပါ။"));
+    }
+    if es.iter().any(|h| h.id == "marcel") {
+        threats.push(prompt(mm,"Marcel's control field","Marcel ရဲ့ control area","Avoid committing the whole team into Marcel's control area. Keep an exit and check the actual skill state before following an engage.","Marcel ရဲ့ control area ထဲ team အကုန်မဝင်ပါနဲ့။ ထွက်လမ်းထားပြီး skill အခြေအနေကို စစ်ပြီးမှ follow-up လုပ်ပါ။"));
+    }
+
     if es.iter().any(|h| h.has("suppress")) {
         threats.push(prompt(mm,"Suppression access","Suppression ကို သတိထား","Track the suppression carrier's position and cooldown. Purify does not remove suppression; coordinate spacing and interruption.","Suppression hero ရဲ့ position နဲ့ cooldown ကို စောင့်ကြည့်ပါ။ Purify နဲ့ မဖြေနိုင်လို့ spacing နဲ့ teammate interruption ကို ညှိပါ။"));
     }
@@ -185,6 +207,7 @@ pub fn analyze(r: &AnalyzeRequest, c: &Catalog) -> Result<Analysis, String> {
         .heroes
         .iter()
         .filter(|h| !used.contains(h.id.as_str()))
+        .filter(|h| h.roles.iter().any(|role| role == ROLES[r.role_index]))
         .map(|h| {
             let mut score = 0;
             let mut reasons = vec![];
@@ -207,7 +230,7 @@ pub fn analyze(r: &AnalyzeRequest, c: &Catalog) -> Result<Analysis, String> {
             if rem.control == 0 && (h.has("cc") || h.has("suppress")) {
                 add(2, "Adds control", "Control ဖြည့်ပေးတယ်");
             }
-            if rem.magic == 0 && h.damage == "magic" {
+            if rem.magic == 0 && ["magic", "mixed"].contains(&h.damage.as_str()) {
                 add(1, "Adds magic damage", "Magic damage ဖြည့်ပေးတယ်");
             }
             if enemy.dive >= 2 && (h.has("peel") || h.has("antidash")) {
@@ -230,7 +253,7 @@ pub fn analyze(r: &AnalyzeRequest, c: &Catalog) -> Result<Analysis, String> {
     candidates.sort_by(|a, b| b.score.cmp(&a.score).then(a.hero_id.cmp(&b.hero_id)));
     candidates.truncate(8);
     Ok(Analysis {
-        rules_version: "coach-rules-1".into(),
+        rules_version: "coach-rules-2".into(),
         patch: c.patch.clone(),
         partial: hs.len() < 5 || es.len() < 5,
         own,
@@ -374,5 +397,69 @@ mod tests {
         assert!(!analyze(&r, &catalog()).unwrap().plan[2]
             .body
             .contains("Esme"));
+    }
+    #[test]
+    fn complete_roster_works_in_every_suggested_lane_and_language() {
+        let c = catalog();
+        assert_eq!(c.heroes.len(), 133);
+        let ids: HashSet<_> = c.heroes.iter().map(|h| &h.id).collect();
+        assert_eq!(ids.len(), 133);
+        for hero in &c.heroes {
+            for lane in &hero.roles {
+                let role = ROLES.iter().position(|r| r == lane).unwrap();
+                for language in ["en", "mm"] {
+                    let mut d = draft();
+                    d.blue.picks = Default::default();
+                    d.blue.picks[role] = Some(hero.id.clone());
+                    let mut r = request(d);
+                    r.role_index = role;
+                    r.language = language.into();
+                    let a = analyze(&r, &c).unwrap();
+                    assert!(a.emblem.is_some(), "{} in {}", hero.id, lane);
+                    assert!(a.candidates.iter().all(|candidate| c
+                        .hero(&candidate.hero_id)
+                        .unwrap()
+                        .roles
+                        .contains(lane)));
+                    if role == 1 {
+                        assert_eq!(a.emblem.unwrap().spell, "Retribution");
+                    }
+                }
+            }
+        }
+    }
+    #[test]
+    fn magic_junglers_and_utility_supports_use_matching_emblems() {
+        let c = catalog();
+        for (hero, role, base) in [
+            ("harley", 1, "Mage"),
+            ("marcel", 0, "Support"),
+            ("gloo", 0, "Tank"),
+            ("hirara", 1, "Assassin"),
+            ("obsidia", 4, "Marksman"),
+        ] {
+            let mut d = draft();
+            d.blue.picks = Default::default();
+            d.blue.picks[role] = Some(hero.into());
+            let mut r = request(d);
+            r.role_index = role;
+            assert_eq!(analyze(&r, &c).unwrap().emblem.unwrap().base, base);
+        }
+    }
+    #[test]
+    fn mixed_damage_and_new_matchup_prompts_are_visible() {
+        let c = catalog();
+        let mixed = counts(&[c.hero("esmeralda").unwrap()]);
+        assert_eq!((mixed.physical, mixed.magic), (1, 1));
+        let mut d = draft();
+        d.red.picks = [Some("marcel".into()), Some("yin".into()), None, None, None];
+        let a = analyze(&request(d), &c).unwrap();
+        for title in [
+            "True-damage triggers",
+            "Respect isolation",
+            "Marcel's control field",
+        ] {
+            assert!(a.threats.iter().any(|p| p.title == title));
+        }
     }
 }

@@ -70,14 +70,19 @@ pub async fn migrate_and_seed(
     pool: &PgPool,
 ) -> std::result::Result<(), Box<dyn std::error::Error + Send + Sync>> {
     sqlx::migrate!("./migrations").run(pool).await?;
-    let c: models::Catalog = serde_json::from_str(include_str!("../../data/catalog.json"))?;
-    sqlx::query(
-        "INSERT INTO catalogs(patch_id,payload) VALUES($1,$2) ON CONFLICT(patch_id) DO NOTHING",
-    )
-    .bind(&c.patch.id)
-    .bind(serde_json::to_value(&c)?)
-    .execute(pool)
-    .await?;
+    for source in [
+        include_str!("../../data/catalogs/baseline-2026-11-07.json"),
+        include_str!("../../data/catalog.json"),
+    ] {
+        let c: models::Catalog = serde_json::from_str(source)?;
+        sqlx::query(
+            "INSERT INTO catalogs(patch_id,payload) VALUES($1,$2) ON CONFLICT(patch_id) DO NOTHING",
+        )
+        .bind(&c.patch.id)
+        .bind(serde_json::to_value(&c)?)
+        .execute(pool)
+        .await?;
+    }
     Ok(())
 }
 pub fn app(state: AppState, origins: Vec<HeaderValue>) -> Router {

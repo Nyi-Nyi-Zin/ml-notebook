@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 class ApiException implements Exception {
@@ -21,6 +22,7 @@ class ApiClient {
     String path, {
     Object? body,
     bool auth = true,
+    Duration timeout = const Duration(seconds: 20),
   }) async {
     if (baseUrl.isEmpty) {
       throw const ApiException(
@@ -35,12 +37,10 @@ class ApiClient {
     }
     if (body != null) request.body = jsonEncode(body);
     try {
-      final streamed = await client
-          .send(request)
-          .timeout(const Duration(seconds: 20));
+      final streamed = await client.send(request).timeout(timeout);
       final response = await http.Response.fromStream(
         streamed,
-      ).timeout(const Duration(seconds: 20));
+      ).timeout(timeout);
       dynamic result;
       if (response.bodyBytes.isNotEmpty) {
         try {

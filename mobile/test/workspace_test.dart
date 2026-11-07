@@ -1,16 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:shared_preferences_platform_interface/in_memory_shared_preferences_async.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_async_platform_interface.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:draftroom/api.dart';
 import 'package:draftroom/models.dart';
 import 'package:draftroom/workspace.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   setUp(() {
     SharedPreferencesAsyncPlatform.instance =
         InMemorySharedPreferencesAsync.empty();
@@ -187,4 +190,50 @@ void main() {
     expect(w.teams.single['id'], 'latest');
     w.dispose();
   });
+  test(
+    'an old cache upgrades to 133 heroes while preserving the local draft',
+    () async {
+      final preferences = SharedPreferencesAsync();
+      final old =
+          jsonDecode(
+                File(
+                  '../data/catalogs/baseline-2026-11-07.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      final draft = Draft.sample(old['patch']['id'] as String)
+        ..notes = 'Keep my coaching notes';
+      await preferences.setString('catalog_cache', jsonEncode(old));
+      await preferences.setString('draft_cache', jsonEncode(draft.toJson()));
+      final w = Workspace(api: ApiClient(), preferences: preferences);
+      await w.init();
+      expect(w.error, isNull);
+      expect(w.catalog!.heroes.length, 133);
+      expect(w.draft!.patchId, w.catalog!.id);
+      expect(w.draft!.notes, draft.notes);
+      expect(w.draft!.blue.picks, draft.blue.picks);
+      w.dispose();
+    },
+  );
+  test(
+    'latest catalog retains picks and notes as a new working copy',
+    () async {
+      final body = File('assets/catalog.json').readAsStringSync();
+      final w = Workspace(
+        api: ApiClient(
+          baseUrl: 'https://api.example.test',
+          client: MockClient((_) async => http.Response(body, 200)),
+        ),
+      );
+      w.catalog = Catalog.fromJson(jsonDecode(body) as Map<String, dynamic>);
+      w.draft = Draft.sample(w.catalog!.id)..notes = 'Preserve this plan';
+      final before = w.draft!.copy();
+      await w.useLatestCatalog();
+      expect(w.draft!.blue.picks, before.blue.picks);
+      expect(w.draft!.notes, before.notes);
+      expect(w.current, isNull);
+      expect(w.dirty, isTrue);
+      w.dispose();
+    },
+  );
 }

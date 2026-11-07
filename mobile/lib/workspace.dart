@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'api.dart';
 import 'models.dart';
 import 'local_engine.dart';
@@ -58,7 +60,11 @@ class Workspace extends ChangeNotifier {
           final candidate = Catalog.fromJson(
             jsonDecode(cachedCatalog) as Map<String, dynamic>,
           );
-          if (candidate.heroes.isNotEmpty) catalog = candidate;
+          // A historical 104-hero cache must not hide the bundled roster update.
+          if (candidate.heroes.isNotEmpty &&
+              candidate.id != 'baseline-2026-11-07') {
+            catalog = candidate;
+          }
         } catch (_) {
           /* Fall back to the bundled baseline. */
         }
@@ -70,6 +76,10 @@ class Workspace extends ChangeNotifier {
       if (cached != null) {
         try {
           final d = Draft.fromJson(jsonDecode(cached) as Map<String, dynamic>);
+          if (d.patchId == 'baseline-2026-11-07' &&
+              catalog!.id == 'roster-133-2026-11-07') {
+            d.patchId = catalog!.id;
+          }
           d.validate(catalog!);
           draft = d;
         } catch (_) {
@@ -97,6 +107,7 @@ class Workspace extends ChangeNotifier {
         'GET',
         '/v1/catalog?patch_id=${Uri.encodeComponent(draft!.patchId)}',
         auth: false,
+        timeout: const Duration(seconds: 75),
       );
       catalog = Catalog.fromJson(Map<String, dynamic>.from(json as Map));
       await preferences.setString('catalog_cache', jsonEncode(catalog!.json));
@@ -321,10 +332,17 @@ class Workspace extends ChangeNotifier {
   Future<void> useLatestCatalog() async {
     final result = await api.request('GET', '/v1/catalog', auth: false);
     final next = Catalog.fromJson(Map<String, dynamic>.from(result as Map));
+    final upgraded = draft!.copy()..patchId = next.id;
+    upgraded.validate(next);
+    _documentEpoch++;
     catalog = next;
+    draft = upgraded;
+    current = null;
+    newTeamId = null;
+    _undo.clear();
     await preferences.setString('catalog_cache', jsonEncode(next.json));
     online = true;
-    newDraft();
+    changed();
   }
 
   void refreshAnalysis() {

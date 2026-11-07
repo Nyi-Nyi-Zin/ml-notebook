@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:draftroom/models.dart';
 import 'package:draftroom/local_engine.dart';
@@ -100,4 +101,78 @@ void main() {
     d.blue.picks[0] = 'unlisted-hero';
     expect(() => d.validate(catalog), throwsFormatException);
   });
+  test(
+    'all 133 heroes work in each suggested lane in both engines languages',
+    () {
+      expect(catalog.heroes.length, 133);
+      expect(catalog.heroes.map((h) => h.id).toSet().length, 133);
+      for (final hero in catalog.heroes) {
+        for (final lane in hero.roles) {
+          final role = roles.indexOf(lane);
+          for (final language in ['en', 'mm']) {
+            final draft = Draft.empty(catalog.id);
+            draft.blue.picks[role] = hero.id;
+            final analysis = localAnalysis(
+              draft,
+              catalog,
+              'blue',
+              role,
+              'balanced',
+              language,
+            );
+            expect(
+              analysis['emblem'],
+              isNotNull,
+              reason: '${hero.id} in $lane',
+            );
+            expect(
+              (analysis['candidates'] as List).every(
+                (candidate) =>
+                    catalog.hero(candidate['hero_id'])!.roles.contains(lane),
+              ),
+              isTrue,
+            );
+            if (role == 1) expect(analysis['emblem']['spell'], 'Retribution');
+          }
+        }
+      }
+    },
+  );
+  test(
+    'magical jungle and non-healing support emblem profiles are respected',
+    () {
+      for (final entry in [
+        ('harley', 1, 'Mage'),
+        ('marcel', 0, 'Support'),
+        ('gloo', 0, 'Tank'),
+        ('hirara', 1, 'Assassin'),
+        ('obsidia', 4, 'Marksman'),
+      ]) {
+        final draft = Draft.empty(catalog.id);
+        draft.blue.picks[entry.$2] = entry.$1;
+        expect(
+          localAnalysis(
+            draft,
+            catalog,
+            'blue',
+            entry.$2,
+            'balanced',
+            'en',
+          )['emblem']['base'],
+          entry.$3,
+        );
+      }
+      final draft = Draft.empty(catalog.id)..blue.picks[3] = 'esmeralda';
+      final counts = localAnalysis(
+        draft,
+        catalog,
+        'blue',
+        3,
+        'balanced',
+        'en',
+      )['own'];
+      expect(counts['physical'], 1);
+      expect(counts['magic'], 1);
+    },
+  );
 }
