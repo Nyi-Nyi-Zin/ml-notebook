@@ -26,6 +26,7 @@ jobs:
         with:
           workspaces: backend
       - run: python3 scripts/check_catalog.py
+      - run: python3 scripts/generate_playbook.py --check
       - run: cargo fmt --manifest-path backend/Cargo.toml --check
       - run: cargo clippy --manifest-path backend/Cargo.toml --all-targets --locked -- -D warnings
       - run: cargo test --manifest-path backend/Cargo.toml --locked
@@ -74,7 +75,7 @@ jobs:
           name: draftroom-web
           path: mobile/build/web
           retention-days: 7
-      - run: flutter build apk --debug --build-number=4 --dart-define=API_BASE_URL=https://draftroom-api-0tyr.onrender.com
+      - run: flutter build apk --debug --build-number=5 --dart-define=API_BASE_URL=https://draftroom-api-0tyr.onrender.com
 
       - uses: actions/upload-artifact@v4
         with:

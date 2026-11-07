@@ -1,0 +1,487 @@
+[
+  {
+    "id": "empty",
+    "draft": {
+      "title": "Playbook fixture",
+      "patch_id": "roster-133-2026-11-07",
+      "notes": "",
+      "blue": {
+        "name": "Blue",
+        "picks": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "red": {
+        "name": "Red",
+        "picks": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "side": "blue",
+    "strategy_id": "lineup-plan-1:await_picks",
+    "required": []
+  },
+  {
+    "id": "enemy_only",
+    "draft": {
+      "title": "Playbook fixture",
+      "patch_id": "roster-133-2026-11-07",
+      "notes": "",
+      "blue": {
+        "name": "Blue",
+        "picks": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "red": {
+        "name": "Red",
+        "picks": [
+          "franco",
+          "saber",
+          null,
+          null,
+          null
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "side": "blue",
+    "strategy_id": "lineup-plan-1:await_picks",
+    "required": []
+  },
+  {
+    "id": "protect_vs_dive",
+    "draft": {
+      "title": "Playbook fixture",
+      "patch_id": "roster-133-2026-11-07",
+      "notes": "",
+      "blue": {
+        "name": "Blue",
+        "picks": [
+          "minotaur",
+          "fredrinn",
+          "lylia",
+          "terizla",
+          "layla"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "red": {
+        "name": "Red",
+        "picks": [
+          "khufra",
+          "hayabusa",
+          "eudora",
+          "yu-zhong",
+          "brody"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "side": "blue",
+    "strategy_id": "lineup-plan-1:protect_carry",
+    "required": [
+      "Layla",
+      "Minotaur",
+      "Hayabusa",
+      "Yu Zhong"
+    ]
+  },
+  {
+    "id": "poke",
+    "draft": {
+      "title": "Playbook fixture",
+      "patch_id": "roster-133-2026-11-07",
+      "notes": "",
+      "blue": {
+        "name": "Blue",
+        "picks": [
+          "rafaela",
+          "fredrinn",
+          "xavier",
+          "uranus",
+          "layla"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "red": {
+        "name": "Red",
+        "picks": [
+          "tigreal",
+          "saber",
+          "eudora",
+          "thamuz",
+          "brody"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "side": "blue",
+    "strategy_id": "lineup-plan-1:poke_siege",
+    "required": [
+      "Xavier",
+      "Layla"
+    ]
+  },
+  {
+    "id": "pick",
+    "draft": {
+      "title": "Playbook fixture",
+      "patch_id": "roster-133-2026-11-07",
+      "notes": "",
+      "blue": {
+        "name": "Blue",
+        "picks": [
+          "franco",
+          "saber",
+          "eudora",
+          "uranus",
+          "brody"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "red": {
+        "name": "Red",
+        "picks": [
+          "hylos",
+          "fredrinn",
+          "valentina",
+          "terizla",
+          "layla"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "side": "blue",
+    "strategy_id": "lineup-plan-1:pick_off",
+    "required": [
+      "Franco",
+      "Saber",
+      "Eudora"
+    ]
+  },
+  {
+    "id": "dive",
+    "draft": {
+      "title": "Playbook fixture",
+      "patch_id": "roster-133-2026-11-07",
+      "notes": "",
+      "blue": {
+        "name": "Blue",
+        "picks": [
+          "minotaur",
+          "ling",
+          "lylia",
+          "esmeralda",
+          "claude"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "red": {
+        "name": "Red",
+        "picks": [
+          "khufra",
+          "hayabusa",
+          "valentina",
+          "terizla",
+          "brody"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "side": "blue",
+    "strategy_id": "lineup-plan-1:dive_followup",
+    "required": [
+      "Minotaur",
+      "Ling",
+      "Esmeralda",
+      "Claude",
+      "Khufra"
+    ]
+  },
+  {
+    "id": "sustain",
+    "draft": {
+      "title": "Playbook fixture",
+      "patch_id": "roster-133-2026-11-07",
+      "notes": "",
+      "blue": {
+        "name": "Blue",
+        "picks": [
+          "estes",
+          "fredrinn",
+          "valentina",
+          "uranus",
+          "brody"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "red": {
+        "name": "Red",
+        "picks": [
+          "franco",
+          "saber",
+          "eudora",
+          "thamuz",
+          "layla"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "side": "blue",
+    "strategy_id": "lineup-plan-1:sustain_frontline",
+    "required": [
+      "Estes",
+      "Fredrinn",
+      "Uranus",
+      "Franco"
+    ]
+  },
+  {
+    "id": "fallback",
+    "draft": {
+      "title": "Playbook fixture",
+      "patch_id": "roster-133-2026-11-07",
+      "notes": "",
+      "blue": {
+        "name": "Blue",
+        "picks": [
+          "hylos",
+          null,
+          null,
+          null,
+          null
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "red": {
+        "name": "Red",
+        "picks": [
+          "brody",
+          null,
+          null,
+          null,
+          null
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "side": "blue",
+    "strategy_id": "lineup-plan-1:coordinated_trade",
+    "required": [
+      "Hylos",
+      "Brody"
+    ]
+  },
+  {
+    "id": "red_focus",
+    "draft": {
+      "title": "Playbook fixture",
+      "patch_id": "roster-133-2026-11-07",
+      "notes": "",
+      "blue": {
+        "name": "Blue",
+        "picks": [
+          "khufra",
+          "hayabusa",
+          "eudora",
+          "yu-zhong",
+          "brody"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "red": {
+        "name": "Red",
+        "picks": [
+          "minotaur",
+          "fredrinn",
+          "lylia",
+          "terizla",
+          "layla"
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "side": "red",
+    "strategy_id": "lineup-plan-1:protect_carry",
+    "required": [
+      "Layla",
+      "Minotaur",
+      "Hayabusa"
+    ]
+  },
+  {
+    "id": "incomplete_dive",
+    "draft": {
+      "title": "Playbook fixture",
+      "patch_id": "roster-133-2026-11-07",
+      "notes": "",
+      "blue": {
+        "name": "Blue",
+        "picks": [
+          "minotaur",
+          "ling",
+          null,
+          "esmeralda",
+          null
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      },
+      "red": {
+        "name": "Red",
+        "picks": [
+          "khufra",
+          null,
+          null,
+          null,
+          null
+        ],
+        "bans": [
+          null,
+          null,
+          null,
+          null,
+          null
+        ]
+      }
+    },
+    "side": "blue",
+    "strategy_id": "lineup-plan-1:dive_followup",
+    "required": [
+      "Minotaur",
+      "Ling",
+      "Esmeralda",
+      "Khufra"
+    ]
+  }
+]

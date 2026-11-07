@@ -49,6 +49,8 @@ analysis = call("POST", "/v1/analyze", {"draft": draft, "side": "blue", "role_in
 assert analysis["emblem"]["talents"][1] == "Pull Yourself Together"
 assert any("Suppression" in threat["title"] for threat in analysis["threats"])
 assert analysis["partial"] is True
+assert analysis["strategy_id"].startswith("lineup-plan-1:")
+assert any("Ling" in card["body"] for card in analysis["plan"])
 call("POST", "/v1/analyze", {"draft": draft, "side": "blue", "role_index": 7, "priority": "balanced"}, expected=400)
 personal = call("POST", "/v1/drafts", {"draft": draft, "team_id": None}, ot)
 shared = call("POST", "/v1/drafts", {"draft": draft, "team_id": team["id"]}, ot)

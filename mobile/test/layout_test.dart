@@ -38,6 +38,19 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('Track copied ultimate'), findsOneWidget);
       expect(tester.takeException(), isNull);
+      await tester.tap(find.text('Playbook'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Win condition · coordinate two angles'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('Plan for · Our team · Blue'), findsOneWidget);
+      await tester.ensureVisible(find.text('Red team'));
+      await tester.tap(find.text('Red team'));
+      await tester.pumpAndSettle();
+      expect(w.focusSide, 'red');
+      expect(find.textContaining('Plan for · Opponent · Red'), findsOneWidget);
+      expect(tester.takeException(), isNull);
     });
   }
   testWidgets(

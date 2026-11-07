@@ -1332,7 +1332,30 @@ class _DeskState extends State<Desk> {
           children: [
             sectionTitle(w.draft!.title),
             gap(),
+            SegmentedButton<String>(
+              key: const ValueKey('playbook-side'),
+              segments: const [
+                ButtonSegment(value: 'blue', label: Text('Blue team')),
+                ButtonSegment(value: 'red', label: Text('Red team')),
+              ],
+              selected: {w.focusSide},
+              onSelectionChanged: (s) => w.selectFocus(s.first, w.focusIndex),
+            ),
+            gap(),
+            Text(
+              '${w.t('Plan for', 'ကစားပုံ အကြံပြုမယ့်ဘက်')} · ${w.draft!.side(w.focusSide).name} · ${w.focusSide == 'blue' ? 'Blue' : 'Red'}',
+              style: const TextStyle(color: lime, fontSize: 13),
+            ),
+            gap(),
             pill('${w.catalog!.patch['label']}'),
+            gap(),
+            Text(
+              w.t(
+                'Lineup-based coaching rules · adapt to the live game.',
+                'Hero lineup အလိုက် coaching rules · လက်ရှိ game အခြေအနေနဲ့ ချိန်ညှိပါ။',
+              ),
+              style: const TextStyle(color: muted, fontSize: 12, height: 1.7),
+            ),
             gap(23),
             ...promptCards(w.analysis?['plan'] as List? ?? []),
           ],

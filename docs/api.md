@@ -42,6 +42,8 @@ Pick positions are fixed as **Roam, Jungle, Mid, EXP, Gold**. All picks and bans
 
 Analysis body: `draft`, `side` (`blue` or `red`), `role_index` (0–4), `priority` (`balanced`, `survival`, `tempo`), and `language` (`en` or `mm`).
 
+Analysis returns `strategy_id` (for example `lineup-plan-1:dive_followup`) and `plan`, an ordered array of localized `{title, body}` cards. A plan depends on both sides' picks and the selected `side`; `role_index` and `priority` continue to affect the emblem and candidates, rather than the whole-team strategy. The first matching strategy wins: awaiting own picks, protecting damage uptime against multiple divers, poke, pick-off, dive follow-up, sustain, then coordinated trades. Context cards describe missing frontline/control, relevant enemy answers and draft completeness. These are catalog-tag heuristics, not AI predictions. Unknown future strategy IDs should be displayed using their cards rather than rejected.
+
 Save body: `draft`, `team_id` (UUID or null), and for updates `expected_revision`. A draft's workspace cannot be changed by updating it; save a copy to move it. Every accepted update/archive/restore increments the revision. A stale write returns 409 and never overwrites the newer revision.
 
 Errors use `{"error":"Human-readable message"}` for handled API errors. Axum may return its standard rejection response for malformed JSON, unsupported content types or oversized request bodies. The client handles non-JSON failures without exposing internal details. Authentication endpoints have an in-process per-IP limit; deployments with several instances need shared rate limits and a trusted proxy strategy before public signup.

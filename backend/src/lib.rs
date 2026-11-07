@@ -2,6 +2,7 @@ pub mod auth;
 pub mod engine;
 pub mod handlers;
 pub mod models;
+pub mod playbook;
 
 use axum::{
     http::{HeaderValue, Method, StatusCode},

@@ -69,6 +69,7 @@ pub struct Analysis {
     pub focus: Option<Hero>,
     pub emblem: Option<Emblem>,
     pub threats: Vec<Prompt>,
+    pub strategy_id: String,
     pub plan: Vec<Prompt>,
     pub candidates: Vec<Candidate>,
 }
@@ -193,8 +194,7 @@ pub fn analyze(r: &AnalyzeRequest, c: &Catalog) -> Result<Analysis, String> {
     if focus.is_some_and(|h| h.id == "minotaur") && es.iter().any(|h| h.id == "valentina") {
         threats.push(prompt(mm,"Track the copied ultimate","Copy လုပ်ထားတဲ့ ultimate ကို စောင့်ကြည့်ပါ","Check Valentina's copied ultimate and avoid a grouped counter-engage after your own initiation.","Valentina copy လုပ်ထားတဲ့ ultimate ကို စစ်ပြီးမှ ဝင်ပါ။ Team အကုန်ကပ်ပြီး counter-engage ခံရတာကို ရှောင်ပါ။"));
     }
-    let mut plan=vec![prompt(mm,"Opening · earn the first move","အစပိုင်း · rotation အရင်ရအောင်","Coordinate the first clear with mid and jungle. Scout only with a purpose, teammate cover and an exit route.","Mid နဲ့ Jungle clear အချိန်ကို ညှိပါ။ ရည်ရွယ်ချက်၊ teammate cover နဲ့ ထွက်လမ်းရှိမှ information ယူပါ။"),prompt(mm,"Objective · control an entrance","Objective · entrance တစ်ခုကို ထိန်းပါ","Prepare nearby waves, pick an entrance to hold, and name who zones the enemy jungler. Reassess if a side-laner cannot join.","အနီးက wave ကို ပြင်ပါ။ ဘယ် entrance ထိန်းမလဲ၊ enemy jungler ကို ဘယ်သူတားမလဲ သတ်မှတ်ပါ။ Side laner မလာနိုင်ရင် ပြန်စဉ်းစားပါ။")];
-    plan.push(if focus.is_some_and(|h|h.id=="minotaur")&&hs.iter().any(|h|h.id=="esmeralda") {prompt(mm,"Teamfight · divide the jobs","Teamfight · တာဝန်ခွဲထားပါ","Esmeralda can pressure a second angle. Minotaur follows with control or holds peel. An assassin commits after key enemy control is used; not everyone must enter together.","Esme က ဒုတိယ angle က pressure ပေးနိုင်တယ်။ Minotaur က follow-up CC သို့မဟုတ် peel တာဝန်ယူပါ။ Assassin က အရေးကြီး enemy CC ထွက်ပြီးမှ ဝင်ပါ။ အားလုံးတပြိုင်တည်း ဝင်ဖို့ မလိုဘူး။")} else {prompt(mm,"Teamfight · name the target","Teamfight · target ကို သတ်မှတ်ပါ","Name the first target, confirm follow-up range, and track the enemy control that stops your damage. Keep peel if the carry is exposed.","ပထမ target နဲ့ teammate လိုက်မီတဲ့ range ကို သတ်မှတ်ပါ။ ကိုယ့် damage ကို တားနိုင်တဲ့ enemy CC ကို စောင့်ပြီး carry အတွက် လိုရင် peel ချန်ထားပါ။")});
+    let (strategy_id, plan) = crate::playbook::plan(&r.draft, &r.side, c, mm);
     let selected_id = r.draft.lineup(&r.side).picks[r.role_index].as_deref();
     let remaining: Vec<&Hero> = hs
         .iter()
@@ -253,7 +253,7 @@ pub fn analyze(r: &AnalyzeRequest, c: &Catalog) -> Result<Analysis, String> {
     candidates.sort_by(|a, b| b.score.cmp(&a.score).then(a.hero_id.cmp(&b.hero_id)));
     candidates.truncate(8);
     Ok(Analysis {
-        rules_version: "coach-rules-2".into(),
+        rules_version: "coach-rules-3".into(),
         patch: c.patch.clone(),
         partial: hs.len() < 5 || es.len() < 5,
         own,
@@ -261,6 +261,7 @@ pub fn analyze(r: &AnalyzeRequest, c: &Catalog) -> Result<Analysis, String> {
         focus: focus.cloned(),
         emblem,
         threats,
+        strategy_id,
         plan,
         candidates,
     })
@@ -394,9 +395,11 @@ mod tests {
     fn myanmar_generic_plan_does_not_invent_esme() {
         let mut r = request(draft());
         r.language = "mm".into();
-        assert!(!analyze(&r, &catalog()).unwrap().plan[2]
-            .body
-            .contains("Esme"));
+        assert!(analyze(&r, &catalog())
+            .unwrap()
+            .plan
+            .iter()
+            .all(|p| !p.body.contains("Esme")));
     }
     #[test]
     fn complete_roster_works_in_every_suggested_lane_and_language() {

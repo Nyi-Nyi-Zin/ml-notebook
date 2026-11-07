@@ -1,4 +1,5 @@
 import 'models.dart';
+import 'playbook.dart';
 
 // Deliberately small offline companion. Rust is authoritative when connected.
 // Exact draft scoring is a coaching heuristic, never a win probability.
@@ -310,33 +311,7 @@ Map<String, dynamic> localAnalysis(
       ),
     );
   }
-  final plan = [
-    p(
-      'Opening · earn the first move',
-      'အစပိုင်း · rotation အရင်ရအောင်',
-      'Coordinate mid and jungle clear. Scout with a purpose, cover and an exit.',
-      'Mid နဲ့ Jungle clear အချိန်ကို ညှိပါ။ ရည်ရွယ်ချက်၊ teammate cover နဲ့ ထွက်လမ်းရှိမှ information ယူပါ။',
-    ),
-    p(
-      'Objective · control an entrance',
-      'Objective · entrance တစ်ခုကို ထိန်းပါ',
-      'Prepare nearby waves, control an entrance and assign who zones the jungler. Reassess if a side-laner cannot join.',
-      'အနီးက wave ကိုပြင်ပါ။ Entrance ထိန်းသူနဲ့ enemy jungler ကို တားမယ့်သူ သတ်မှတ်ပါ။ Side laner မလာနိုင်ရင် ပြန်စဉ်းစားပါ။',
-    ),
-    focus?.id == 'minotaur' && own.any((h) => h.id == 'esmeralda')
-        ? p(
-            'Teamfight · divide the jobs',
-            'Teamfight · တာဝန်ခွဲထားပါ',
-            'Esme pressures another angle. Minotaur follows with control or peels. The assassin commits after key enemy control is used.',
-            'Esme က ဒုတိယ angle က pressure ပေးပါ။ Minotaur က follow-up CC သို့မဟုတ် peel လုပ်ပါ။ Assassin က အရေးကြီး enemy CC ထွက်ပြီးမှ ဝင်ပါ။',
-          )
-        : p(
-            'Teamfight · name the target',
-            'Teamfight · target ကို သတ်မှတ်ပါ',
-            'Name the first target and confirm follow-up range. Keep peel if the carry is exposed.',
-            'ပထမ target နဲ့ teammate လိုက်မီတဲ့ range ကို သတ်မှတ်ပါ။ Carry အတွက် လိုရင် peel ချန်ထားပါ။',
-          ),
-  ];
+  final strategy = lineupPlan(draft, catalog, side, language);
   final remaining = own.where((h) => h.id != focus?.id).toList();
   final rc = counts(remaining);
   final candidates =
@@ -386,7 +361,7 @@ Map<String, dynamic> localAnalysis(
               : (a['hero_id'] as String).compareTo(b['hero_id'] as String);
         });
   return {
-    'rules_version': 'offline-rules-2',
+    'rules_version': 'offline-rules-3',
     'patch': catalog.patch,
     'partial': own.length < 5 || enemies.length < 5,
     'own': counts(own),
@@ -394,7 +369,7 @@ Map<String, dynamic> localAnalysis(
     'focus': focus == null ? null : {'id': focus.id, 'name': focus.name},
     'emblem': emblem,
     'threats': threats,
-    'plan': plan,
+    ...strategy,
     'candidates': candidates.take(8).toList(),
   };
 }

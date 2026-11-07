@@ -8,6 +8,7 @@ A working first version of an MLBB drafting and coaching app. Mobile UI is Flutt
 - A searchable roster of all 133 Original Server heroes, including Hirara, Marcel, Sora, Obsidia, Zetian and Kalea.
 - Explainable emblem, battle-spell, matchup and playstyle prompts. Minotaur rules consider the other frontline, enemy burst and explicit Balanced / Survival / Tempo preferences.
 - English and Myanmar advice, playbook, coach notes, JSON copy/import and copyable Markdown briefs.
+- Lineup-specific win conditions and named teamfight jobs: protect a carry, poke, pick off, coordinate dives or sustain. Playbook switches between Blue and Red; enemy anti-dash, sustain and suppression add actionable responses. Online and offline share the same bilingual rules.
 - Offline practice with a bundled catalog and a small Dart companion engine. Online advice is calculated by Rust. Labels identify which engine answered.
 - Password accounts with Argon2 hashes and expiring opaque session tokens. Mobile tokens use platform secure storage; only token hashes are stored on the server.
 - Personal and team drafts. Owners invite coaches or read-only viewers with one-use, 24-hour codes.
@@ -73,6 +74,8 @@ Team rooms use explicit refresh in this version; there is no live WebSocket broa
 Roster coverage, sources, inference limits and upgrade behavior are recorded in `docs/roster-update.md`. `python3 scripts/check_catalog.py` guards the exact manifest, unique profiles and online/offline parity.
 
 `data/catalog.json` is the versioned seed source; `mobile/assets/catalog.json` is its offline copy. The 133-name roster was cross-checked on 7 November 2026; the catalog remains **review required** for live balance and optimal-build claims. Suggested lanes, utility tags and talent pages are coaching assumptions, not verified live balance data. Physical/magic counts both include mixed-damage profiles, so those columns are not mutually exclusive. Most hero emblem pages are generic role templates; Minotaur has more specific scenario rules. Scores are not win rates or guaranteed counters.
+
+Lineup plans use deterministic composition rules rather than a generative AI service or win predictor. `data/playbook_rules.json` supplies the ordered strategy conditions, hero-name templates and contextual advice for both runtimes. After edits run `python3 scripts/generate_playbook.py`; CI checks the generated Dart copy. Missing picks keep plans provisional; bans never count as actors. No gold, item, cooldown, player-skill or current match-state information is available to the planner.
 
 To add a reviewed catalog, copy the seed shape, assign a **new** patch ID, edit its profiles and review metadata, then import it against the running database:
 

@@ -1,0 +1,411 @@
+{
+  "version": "lineup-plan-1",
+  "styles": [
+    {
+      "id": "await_picks",
+      "when": [
+        {
+          "metric": "own_picks",
+          "min": 0,
+          "max": 0
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Choose your lineup",
+            "mm": "ကိုယ့် hero တွေ အရင်ရွေးပါ"
+          },
+          "body": {
+            "en": "Add your team’s picks to form a win condition. Enemy picks alone cannot establish your team’s plan.",
+            "mm": "ကိုယ့်ဘက် hero တွေ ရွေးပြီးမှ win condition သတ်မှတ်နိုင်မယ်။ Enemy pick တွေပဲ ရှိတာနဲ့ ကိုယ့် team ကစားပုံကို မသတ်မှတ်နိုင်သေးဘူး။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "protect_carry",
+      "when": [
+        {
+          "metric": "enemy_dive",
+          "min": 2
+        },
+        {
+          "metric": "own_peel",
+          "min": 1
+        },
+        {
+          "metric": "own_dps",
+          "min": 1
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Win condition · protect damage uptime",
+            "mm": "Win condition · carry ပစ်ခွင့်ရအောင် ကာပေးပါ"
+          },
+          "body": {
+            "en": "Damage core: {own_dps}. Peel options: {own_peel}. Against {enemy_dive}, hold one control tool for the second entry and let the core hit the nearest safe target.",
+            "mm": "Damage core က {own_dps}၊ peel လုပ်ပေးနိုင်သူက {own_peel} ပါ။ {enemy_dive} ဝင်လာရင် တားနိုင်ဖို့ CC တစ်ခု ချန်ပါ။ Core က လုံခြုံစွာ ပစ်နိုင်တဲ့ အနီးဆုံး target ကို ပစ်ပါ။"
+          }
+        },
+        {
+          "title": {
+            "en": "Teamfight · wait for their entry",
+            "mm": "Teamfight · enemy ဝင်လာချိန်ကို စောင့်ပါ"
+          },
+          "body": {
+            "en": "{own_peel}: stay within cover range of {own_dps}; stop the diver before chasing their backline. Do not spend every defensive skill to start a fight.",
+            "mm": "{own_peel} က {own_dps} ကို ကူနိုင်တဲ့အကွာအဝေးမှာ နေပါ။ Enemy backline လိုက်မဝင်ခင် diver ကို တားပါ။ Fight စဖို့ defensive skill အကုန်မသုံးပါနဲ့။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "poke_siege",
+      "when": [
+        {
+          "metric": "own_poke",
+          "min": 2
+        },
+        {
+          "metric": "own_dive",
+          "min": 0,
+          "max": 1
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Win condition · poke before committing",
+            "mm": "Win condition · မဝင်ခင် HP ဖြတ်ပါ"
+          },
+          "body": {
+            "en": "Poke sources: {own_poke}. Clear the nearby wave, pressure from safe range, then take space when enemy HP drops. Reset if {enemy_control} can reach your damage line.",
+            "mm": "{own_poke} နဲ့ အဝေးက HP ဖြတ်ပါ။ အနီးက wave ကို ရှင်းပြီး enemy HP နည်းသွားမှ နေရာယူပါ။ {enemy_control} က ကိုယ့် damage ပေးသူတွေကို ဝင်ဖမ်းနိုင်ရင် နောက်ဆုတ်ပြီး ပြန်စပါ။"
+          }
+        },
+        {
+          "title": {
+            "en": "Teamfight · keep the distance",
+            "mm": "Teamfight · အကွာအဝေးထိန်းပါ"
+          },
+          "body": {
+            "en": "{own_poke}: approach from covered terrain and keep an exit. Avoid an all-in while the opponent is healthy; the plan needs repeated safe casts.",
+            "mm": "{own_poke} က teammate cover ရှိတဲ့နေရာကနေ ပစ်ပြီး ထွက်လမ်းထားပါ။ Enemy HP ပြည့်နေချိန် အကုန်ဝင်မတိုက်ပါနဲ့။ Skill အကြိမ်ကြိမ် ပေးနိုင်ဖို့ လိုတယ်။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "pick_off",
+      "when": [
+        {
+          "metric": "own_pick",
+          "min": 1
+        },
+        {
+          "metric": "own_burst",
+          "min": 1
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Win condition · create a numbers advantage",
+            "mm": "Win condition · လူအရေအတွက် အသာယူပါ"
+          },
+          "body": {
+            "en": "Pick tools: {own_pick}. Follow-up burst: {own_burst}. Catch an isolated opponent with nearby follow-up, then turn the advantage into a turret or objective.",
+            "mm": "{own_pick} နဲ့ လူခွဲနေတဲ့ enemy ကို ဖမ်းပြီး {own_burst} က လိုက်မီတဲ့အကွာအဝေးက damage ဆက်ပေးပါ။ လူအသာရရင် turret ဒါမှမဟုတ် objective ယူပါ။"
+          }
+        },
+        {
+          "title": {
+            "en": "Teamfight · one call, then follow-up",
+            "mm": "Teamfight · target တစ်ခုကို ညှိဖမ်းပါ"
+          },
+          "body": {
+            "en": "Confirm range and target before {own_pick} commits. {own_burst} should be ready to follow. Avoid chasing into fog after the first elimination.",
+            "mm": "{own_pick} မဝင်ခင် target နဲ့ follow-up range ကို သတ်မှတ်ပါ။ {own_burst} က damage ဆက်ပေးဖို့ အသင့်နေပါ။ တစ်ယောက်ဖမ်းပြီးရင် fog ထဲအထိ လိုက်မဝင်ပါနဲ့။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "dive_followup",
+      "when": [
+        {
+          "metric": "own_dive",
+          "min": 2
+        },
+        {
+          "metric": "own_control",
+          "min": 1
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Win condition · coordinate two angles",
+            "mm": "Win condition · angle နှစ်ဖက် ညှိဝင်ပါ"
+          },
+          "body": {
+            "en": "Dive options: {own_dive}. Control options: {own_control}. Pressure from separate covered angles and commit after key enemy control is spent. Keep someone available to cover the damage line.",
+            "mm": "{own_dive} က cover ရှိတဲ့ angle နှစ်ဖက်က pressure ပေးပါ။ {own_control} နဲ့ CC ညှိပြီး အရေးကြီး enemy CC ထွက်မှ ဝင်ပါ။ ကိုယ့် damage ပေးသူကို ကာဖို့လည်း လူချန်ပါ။"
+          }
+        },
+        {
+          "title": {
+            "en": "Teamfight · stagger the commitment",
+            "mm": "Teamfight · ဝင်ချိန်ကို ခွဲထားပါ"
+          },
+          "body": {
+            "en": "{own_control}: call the opening and confirm follow-up range. {own_dive}: avoid entering together into {enemy_control}; preserve an exit if the first target survives.",
+            "mm": "{own_control} က opening ကို ခေါ်ပြီး follow-up လိုက်မီမမီ စစ်ပါ။ {own_dive} က {enemy_control} ဆီ တပြိုင်တည်း မဝင်ပါနဲ့။ Target မသေရင် ပြန်ထွက်ဖို့ skill ချန်ပါ။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "sustain_frontline",
+      "when": [
+        {
+          "metric": "own_sustain",
+          "min": 2
+        },
+        {
+          "metric": "own_frontline",
+          "min": 1
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Win condition · controlled extended fights",
+            "mm": "Win condition · fight ကို အဆင့်ဆင့် ဆက်ပါ"
+          },
+          "body": {
+            "en": "Frontline: {own_frontline}. Sustain: {own_sustain}. Trade with cover, reset between damage waves, and re-enter while allies can still support. Sustain does not justify standing in burst.",
+            "mm": "{own_frontline} က နေရာထိန်းပြီး {own_sustain} ရဲ့ sustain ကို အသုံးချပါ။ Damage wave တစ်ခုပြီးတိုင်း နောက်ဆုတ်ညှိပြီး teammate ကူနိုင်ချိန်မှ ပြန်ဝင်ပါ။ Sustain ရှိလို့ burst ထဲ ရပ်ခံဖို့ မဟုတ်ပါဘူး။"
+          }
+        },
+        {
+          "title": {
+            "en": "Teamfight · preserve support range",
+            "mm": "Teamfight · အကူအညီမီတဲ့ range ထိန်းပါ"
+          },
+          "body": {
+            "en": "Keep {own_frontline} within support range of {own_sustain}. Stop chasing when that link breaks; review enemy anti-heal application before extending a trade.",
+            "mm": "{own_frontline} နဲ့ {own_sustain} တို့ ကူညီမီတဲ့အကွာအဝေးမှာ နေပါ။ အကူမမီတော့ရင် လိုက်တာရပ်ပါ။ Fight ရှည်မတိုက်ခင် enemy anti-heal apply လုပ်နိုင်မှုကို စစ်ပါ။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "coordinated_trade",
+      "when": [],
+      "cards": [
+        {
+          "title": {
+            "en": "Win condition · build a safe numbers advantage",
+            "mm": "Win condition · လုံခြုံတဲ့ လူအသာယူပါ"
+          },
+          "body": {
+            "en": "Current lineup: {own_all}. No stronger composition pattern is established by the catalog tags. Prepare waves, move with nearby allies and convert a safe catch into map pressure.",
+            "mm": "လက်ရှိ lineup က {own_all} ပါ။ Catalog tag တွေအရ ထင်ရှားတဲ့ team pattern မသတ်မှတ်နိုင်သေးလို့ wave ပြင်ပြီး အနီးက teammate နဲ့ လှုပ်ရှားပါ။ လုံခြုံစွာ လူဖမ်းရရင် map pressure အဖြစ် ပြောင်းပါ။"
+          }
+        },
+        {
+          "title": {
+            "en": "Teamfight · confirm follow-up",
+            "mm": "Teamfight · လိုက်မီမမီ စစ်ပါ"
+          },
+          "body": {
+            "en": "Name a first target and an exit before committing. Keep allied damage within cover range. Do not force a five-player fight without information on {enemy_all}.",
+            "mm": "ပထမ target နဲ့ ထွက်လမ်းကို သတ်မှတ်ပြီးမှ ဝင်ပါ။ Damage ပေးသူတွေကို cover မီအောင်ထားပါ။ {enemy_all} ရဲ့နေရာ မသိဘဲ ငါးယောက်တိုက်တာ အတင်းမလုပ်ပါနဲ့။"
+          }
+        }
+      ]
+    }
+  ],
+  "common": [
+    {
+      "title": {
+        "en": "Opening · connect mid and jungle",
+        "mm": "အစပိုင်း · Mid နဲ့ Jungle ကို ညှိပါ"
+      },
+      "body": {
+        "en": "Mid: {mid}. Jungle: {jungle}. Compare clear timing before moving together; call missing enemies and avoid an unsupported invade. Side lanes keep a safe wave and report who can rotate.",
+        "mm": "Mid က {mid}၊ Jungle က {jungle} ပါ။ Clear အချိန်ကို ကြည့်ပြီး အတူ rotate ပါ။ ပျောက်နေတဲ့ enemy ကို ပြောပေးပြီး အကူမပါဘဲ invade မလုပ်ပါနဲ့။ Side lane တွေက wave ကို လုံခြုံစွာထိန်းပြီး rotate မီမမီ ပြောပါ။"
+      }
+    },
+    {
+      "title": {
+        "en": "Objective · earn the setup first",
+        "mm": "Objective · setup အရင်ယူပါ"
+      },
+      "body": {
+        "en": "Prepare nearby waves and check who can join. {jungle}: check Retribution availability; assign a different teammate to zone the opposing jungler. After a pick, decide between the objective and a turret. If outnumbered, trade across the map instead of entering blindly.",
+        "mm": "အနီးက wave တွေပြင်ပြီး ဘယ်သူလိုက်မီမလဲ စစ်ပါ။ {jungle} က Retribution ရမရ စစ်ပြီး enemy jungler ကို တားဖို့ တခြား teammate တစ်ယောက် သတ်မှတ်ပါ။ လူဖမ်းရပြီးရင် objective သို့မဟုတ် turret ယူမလား ဆုံးဖြတ်ပါ။ လူနည်းနေရင် မျက်စိမှိတ်မဝင်ဘဲ map တစ်ဖက်မှာ trade လုပ်ပါ။"
+      }
+    }
+  ],
+  "context": [
+    {
+      "id": "no_frontline",
+      "when": [
+        {
+          "metric": "own_frontline",
+          "min": 0,
+          "max": 0
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Avoid · uncovered face-checks",
+            "mm": "ရှောင်ရန် · cover မရှိဘဲ fog ထဲဝင်ခြင်း"
+          },
+          "body": {
+            "en": "No frontline profile is selected. Use waves, range and teammate cover for information; do not send a fragile hero into fog to start the setup.",
+            "mm": "Frontline profile မပါသေးလို့ wave၊ range နဲ့ teammate cover ကို သုံးပြီး information ယူပါ။ ခံနိုင်ရည်နည်းတဲ့ hero ကို fog ထဲ အရင်လွှတ်ပြီး setup မစပါနဲ့။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "no_control",
+      "when": [
+        {
+          "metric": "own_control",
+          "min": 0,
+          "max": 0
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Avoid · assuming a guaranteed catch",
+            "mm": "ရှောင်ရန် · enemy ကို အမြဲဖမ်းနိုင်မယ်လို့ ယူဆခြင်း"
+          },
+          "body": {
+            "en": "No control profile is selected. Plan around wave pressure and mistakes you can punish; do not rely on an unconfirmed hard engage.",
+            "mm": "Control profile မပါသေးလို့ wave pressure နဲ့ enemy အမှားကို အသုံးချပါ။ Hard engage သေချာရှိသလို မစီစဉ်ပါနဲ့။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "anti_dive",
+      "when": [
+        {
+          "metric": "own_dive",
+          "min": 1
+        },
+        {
+          "metric": "enemy_antidash",
+          "min": 1
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Enemy answer · anti-dash control",
+            "mm": "Enemy တားနိုင်ပုံ · anti-dash"
+          },
+          "body": {
+            "en": "{enemy_antidash} can disrupt dash-based entry. {own_dive}: track the relevant skill and approach from another angle or wait it out.",
+            "mm": "{enemy_antidash} က dash နဲ့ ဝင်တာကို တားနိုင်တယ်။ {own_dive} က သက်ဆိုင်တဲ့ skill ကို စောင့်ကြည့်ပြီး တခြား angle ပြောင်းပါ၊ ဒါမှမဟုတ် skill ကုန်မှ ဝင်ပါ။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "anti_sustain",
+      "when": [
+        {
+          "metric": "enemy_sustain",
+          "min": 2
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Enemy answer · sustain coverage",
+            "mm": "Enemy တားနိုင်ပုံ · sustain"
+          },
+          "body": {
+            "en": "Enemy sustain: {enemy_sustain}. Assign anti-heal application and target focus before extending a fight; do not leave every utility purchase to the roamer.",
+            "mm": "Enemy sustain က {enemy_sustain} ပါ။ Fight ရှည်မတိုက်ခင် anti-heal apply လုပ်မယ့်သူနဲ့ target ကို သတ်မှတ်ပါ။ Utility item အားလုံးကို roam တစ်ယောက်တည်း မပုံပါနဲ့။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "suppression",
+      "when": [
+        {
+          "metric": "enemy_suppress",
+          "min": 1
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Enemy answer · suppression access",
+            "mm": "Enemy တားနိုင်ပုံ · suppression"
+          },
+          "body": {
+            "en": "{enemy_suppress}: track position and the suppression skill before exposing the core. Purify does not remove suppression.",
+            "mm": "{enemy_suppress} ရဲ့နေရာနဲ့ suppression skill ရမရကို စစ်ပြီးမှ core ကို ရှေ့ထုတ်ပါ။ Purify နဲ့ suppression ကို မဖြေနိုင်ဘူး။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "partial",
+      "when": [
+        {
+          "metric": "missing_picks",
+          "min": 1
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Provisional · {own_picks}/5 vs {enemy_picks}/5 picks",
+            "mm": "ယာယီအကြံပြုချက် · {own_picks}/5 နဲ့ {enemy_picks}/5 picks"
+          },
+          "body": {
+            "en": "Missing picks can change this plan. These are tag-based coaching rules, not an AI prediction or a win probability; check current game state before committing.",
+            "mm": "Hero မစုံသေးလို့ ထပ်ရွေးရင် ဒီကစားပုံ ပြောင်းနိုင်တယ်။ Hero tag အပေါ်မူတည်တဲ့ coaching rules ဖြစ်ပြီး AI prediction၊ win probability မဟုတ်ပါဘူး။ လက်ရှိ game အခြေအနေနဲ့ ချိန်ညှိပါ။"
+          }
+        }
+      ]
+    },
+    {
+      "id": "complete",
+      "when": [
+        {
+          "metric": "missing_picks",
+          "min": 0,
+          "max": 0
+        }
+      ],
+      "cards": [
+        {
+          "title": {
+            "en": "Adapt · check the live game state",
+            "mm": "ချိန်ညှိရန် · လက်ရှိ game အခြေအနေကို ကြည့်ပါ"
+          },
+          "body": {
+            "en": "This plan uses the ten selected heroes and catalog tags. Gold, items, cooldowns and player execution are not modeled. Reassess after each fight; no outcome is guaranteed.",
+            "mm": "ရွေးထားတဲ့ hero ဆယ်ယောက်နဲ့ catalog tag တွေကို သုံးထားတာပါ။ Gold၊ item၊ cooldown နဲ့ player execution ကို မတွက်ထားလို့ fight တစ်ခုပြီးတိုင်း ပြန်ချိန်ညှိပါ။ နိုင်မယ်လို့ အာမမခံနိုင်ပါဘူး။"
+          }
+        }
+      ]
+    }
+  ]
+}
