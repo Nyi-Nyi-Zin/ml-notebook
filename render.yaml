@@ -1,17 +1,32 @@
+# Free preview deployment: Render Free Postgres expires after 30 days.
 services:
   - type: web
     name: draftroom-api
     runtime: docker
+    region: singapore
     plan: free
     dockerfilePath: ./backend/Dockerfile
     dockerContext: .
     healthCheckPath: /health
     envVars:
       - key: DATABASE_URL
-        sync: false
+        fromDatabase:
+          name: draftroom-db
+          property: connectionString
+      # Native Flutter clients do not need browser CORS. Add the exact HTTPS
+      # Flutter web origin here when a web frontend is deployed.
       - key: APP_ORIGINS
-        sync: false
+        value: ""
       - key: DB_MAX_CONNECTIONS
         value: "4"
       - key: RUST_LOG
         value: info
+
+databases:
+  - name: draftroom-db
+    region: singapore
+    plan: free
+    postgresMajorVersion: "16"
+    databaseName: draftroom
+    user: draftroom
+    ipAllowList: []
