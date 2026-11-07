@@ -222,7 +222,13 @@ void main() {
       final w = Workspace(
         api: ApiClient(
           baseUrl: 'https://api.example.test',
-          client: MockClient((_) async => http.Response(body, 200)),
+          client: MockClient(
+            (_) async => http.Response(
+              body,
+              200,
+              headers: {'content-type': 'application/json; charset=utf-8'},
+            ),
+          ),
         ),
       );
       w.catalog = Catalog.fromJson(jsonDecode(body) as Map<String, dynamic>);
